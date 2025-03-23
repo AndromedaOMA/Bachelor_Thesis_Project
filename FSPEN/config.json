@@ -4,6 +4,9 @@
     "hop_length": 256,
     "train_frames": 62,
     "train_points": 15616,
+    "learning_rate": 0.01,
+    "epochs": 20,
+    "batch_size": 64,
     "full_band_encoder": {
         "encoder1": {
             "in_channels": 2,

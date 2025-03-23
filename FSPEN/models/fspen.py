@@ -136,35 +136,44 @@ class FullSubPathExtension(nn.Module):
         :param in_complex_spectrum: (batch, frames, channels, frequency)
         :return:
         """
+        # Reshape pentru compatibilitate
         batch, frames, channels, frequency = in_complex_spectrum.shape
         complex_spectrum = torch.reshape(in_complex_spectrum, shape=(batch * frames, channels, frequency))
         amplitude_spectrum = torch.reshape(in_amplitude_spectrum, shape=(batch*frames, 1, frequency))
 
+        # Extracția caracteristicilor globale și locale
         full_band_encode_outs, global_feature = self.full_band_encoder(complex_spectrum)
         sub_band_encode_outs, local_feature = self.sub_band_encoder(amplitude_spectrum)
 
+        # Fuzionarea caracteristicilor globale și locale
         merge_feature = torch.cat(tensors=[global_feature, local_feature], dim=2)  # feature cat
         merge_feature = self.feature_merge_layer(merge_feature)
         # (batch*frames, channels, frequency) -> (batch*frames, channels//2, frequency//2)
+
+        # Rearanjarea datelor pentru procesare RNN
         _, channels, frequency = merge_feature.shape
         merge_feature = torch.reshape(merge_feature, shape=(batch, frames, channels, frequency))
         merge_feature = torch.permute(merge_feature, dims=(0, 3, 1, 2)).contiguous()
         # (batch, frequency, frames, channels)
+
+        # Procesarea prin RNN dual-path
         out_hidden_state = list()
         for idx, rnn_layer in enumerate(self.dual_path_extension_rnn_list):
             merge_feature, state = rnn_layer(merge_feature, hidden_state[idx])
             out_hidden_state.append(state)
 
+        # Reorganizarea caracteristicilor
         merge_feature = torch.permute(merge_feature, dims=(0, 2, 3, 1)).contiguous()
         merge_feature = torch.reshape(merge_feature, shape=(batch * frames, channels, frequency))
 
+        # Separarea caracteristicilor pentru decodare
         split_feature = self.feature_split_layer(merge_feature)
         first_dim, channels, frequency = split_feature.shape
         split_feature = torch.reshape(split_feature, shape=(first_dim, channels, -1, 2))
 
+        # Aplicarea măștilor spectrale
         full_band_mask = self.full_band_decoder(split_feature[..., 0], full_band_encode_outs)
         sub_band_mask = self.sub_band_decoder(split_feature[..., 1], sub_band_encode_outs)
-
         full_band_mask = torch.reshape(full_band_mask, shape=(batch, frames, 2, -1))
         sub_band_mask = torch.reshape(sub_band_mask, shape=(batch, frames, 1, -1))
 

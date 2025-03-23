@@ -22,6 +22,9 @@ class TrainConfig(BaseModel):
     hop_length: int = 256
     train_frames: int = 62
     train_points: int = (train_frames - 1) * hop_length
+    learning_rate: int = 0.01
+    epochs: int = 20
+    batch_size: int = 64
 
     full_band_encoder: Dict[str, dict] = {
         "encoder1": {"in_channels": 2, "out_channels": 4, "kernel_size": 6, "stride": 2, "padding": 2},
