@@ -66,6 +66,22 @@ class AudioDataset(Dataset):
 
         return noisy_complex_spectrum, clean_complex_spectrum, noisy_amplitude_spectrum, clean_amplitude_spectrum
 
+    def batches_generator(self, data):
+        """YIELD (continuous "return") the current batches of self.configs.batch_size elements each"""
+        buffer = []
+
+        for example in data.shuffle(buffer_size=5000):
+            buffer.append(example)
+
+            if len(buffer) == self.configs.batch_size:
+                batch = buffer[:self.configs.batch_size]
+                buffer = buffer[self.configs.batch_size:]
+                yield batch
+
+        # Yield any remaining data (if less than batch_size)
+        if buffer:
+            yield buffer
+
 
 def create_dataloader(split, configs, batch_size=32):
     """
@@ -92,18 +108,19 @@ if __name__ == "__main__":
     # train_set = load_dataset("JacobLinCool/VoiceBank-DEMAND-16k", split='train', streaming=True, num_proc=5)
     # test_set = load_dataset("JacobLinCool/VoiceBank-DEMAND-16k", split='test', streaming=True, num_proc=5)
     # print(train_set, test_set)
-    data_files = {'train': [
-        '../../VoiceBank_DEMAND_16k/train/0000.parquet',
-        '../../VoiceBank_DEMAND_16k/train/0001.parquet',
-        '../../VoiceBank_DEMAND_16k/train/0002.parquet',
-        '../../VoiceBank_DEMAND_16k/train/0003.parquet',
-        '../../VoiceBank_DEMAND_16k/train/0004.parquet',
-    ],
+    data_files = {
+        'train': [
+            '../../VoiceBank_DEMAND_16k/train/0000.parquet',
+            '../../VoiceBank_DEMAND_16k/train/0001.parquet',
+            '../../VoiceBank_DEMAND_16k/train/0002.parquet',
+            '../../VoiceBank_DEMAND_16k/train/0003.parquet',
+            '../../VoiceBank_DEMAND_16k/train/0004.parquet',
+        ],
         'test': [
             '../../VoiceBank_DEMAND_16k/test/0000.parquet'
         ]}
 
-    dataset = load_dataset("parquet", data_files=data_files)
+    dataset = load_dataset("parquet", data_files=data_files, streaming=True)
     print(dataset)
 
     # Salvarea configurației de antrenare
@@ -111,6 +128,11 @@ if __name__ == "__main__":
     with open("config.json", mode="w", encoding="utf-8") as file:
         json.dump(configs.__dict__, file, indent=4)
     model = FullSubPathExtension(configs)
+
+    ds = AudioDataset(dataset, configs)
+    print(f"Length of ds: {ds.__len__()}\n")
+    test_batches = ds.batches_generator(ds.dataset['test'])
+    train_batches = ds.batches_generator(ds.dataset['train'])
 
     # Generarea unui input pentru testare
     # in_wav = torch.tensor(train_set["clean"][1])
