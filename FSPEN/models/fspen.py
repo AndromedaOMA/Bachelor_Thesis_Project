@@ -1,8 +1,8 @@
 import torch
 
 from torch import nn, Tensor
-from modules.en_decoder import FullBandEncoderBlock, FullBandDecoderBlock
-from modules.en_decoder import SubBandEncoderBlock, SubBandDecoderBlock
+from modules.en_decoder import (FullBandEncoderBlock, FullBandDecoderBlock,
+                                SubBandEncoderBlock, SubBandDecoderBlock)
 from modules.sequence_modules import DualPathExtensionRNN
 from configs.train_configs import TrainConfig
 

@@ -1,8 +1,8 @@
 import torch
 
 from torch import nn, Tensor
-from modules.en_decoder import FullBandEncoderBlock, FullBandDecoderBlock
-from modules.en_decoder import SubBandEncoderBlock, SubBandDecoderBlock
+from modules.en_decoder import (FullBandEncoderBlock, FullBandDecoderBlock,
+                                SubBandEncoderBlock, SubBandDecoderBlock)
 from modules.sequence_modules import DualPathExtensionRNN
 from configs.train_configs import TrainConfig
 
@@ -114,6 +114,7 @@ class FullSubPathExtension(nn.Module):
             nn.Conv1d(in_channels=merge_bands, out_channels=merge_bands//compress_rate, kernel_size=1, stride=1)
         )
 
+        """DPE"""
         self.dual_path_extension_rnn_list = nn.ModuleList()
         for _ in range(configs.dual_path_extension["num_modules"]):
             self.dual_path_extension_rnn_list.append(DualPathExtensionRNN(**configs.dual_path_extension["parameters"]))
