@@ -1,48 +1,11 @@
 import json
 import torch
-from datasets import load_dataset
 from thop import profile, clever_format
-from torch.utils.data import DataLoader
 
 from configs.train_configs import TrainConfig
 from models.fspen import FullSubPathExtension
 
 from data.voicebank_demand_16K import VoiceBankDEMAND
-
-
-def prepare_spectrum_inputs(waveforms: torch.Tensor, configs: TrainConfig):
-    """
-    Compute STFT and format tensors for model input.
-    Args:
-        waveforms (torch.Tensor): Input waveform tensor of shape (B, T).
-        configs (TrainConfig): Configuration object with STFT and model parameters.
-
-    Returns:
-        complex_spectrum (torch.Tensor): Complex spectrum tensor for the model.
-        amplitude_spectrum (torch.Tensor): Amplitude spectrum tensor for the model.
-    """
-    batch_size = waveforms.size(0)
-
-    # STFT returns (B, F, T) complex
-    complex_spectrum = torch.stft(
-        waveforms,
-        n_fft=configs.n_fft,
-        hop_length=configs.hop_length,
-        window=torch.hamming_window(configs.n_fft),
-        return_complex=True,
-    )
-
-    # Amplitude spectrum (B, F, T) → (B, T, 1, F)
-    amplitude_spectrum = torch.abs(complex_spectrum)
-    amplitude_spectrum = amplitude_spectrum.permute(0, 2, 1).unsqueeze(2)
-
-    # Convert complex spectrum to real (B, F, T, 2) → (B, T, 2, F)
-    complex_spectrum = torch.view_as_real(complex_spectrum)
-    complex_spectrum = complex_spectrum.permute(0, 2, 3, 1)
-
-    # Final reshape: (B, T, C, F)
-    return complex_spectrum, amplitude_spectrum
-
 
 if __name__ == "__main__":
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -52,15 +15,17 @@ if __name__ == "__main__":
     with open("config.json", mode="w", encoding="utf-8") as file:
         json.dump(configs.__dict__, file, indent=4)
 
-    model = FullSubPathExtension(configs)
+    model = FullSubPathExtension(configs).to(device)
+    model.eval()
 
-    # TODO: implement the VoiceBank_DEMAND class
+    dataset = VoiceBankDEMAND(device, configs)
+    print(f"dataset has {len(dataset)} samples!")
 
-    batch = 1
-    waveforms = torch.randn(batch, configs.train_points)
+    sample = dataset[0]
+    complex_spectrum = sample["noisy_complex"].to(device=device, dtype=torch.float32)       # (B=1, T, 2, F)
+    amplitude_spectrum = sample["noisy_amplitude"].to(device=device, dtype=torch.float32)   # (B=1, T, 1, F)
 
-    complex_spectrum, amplitude_spectrum = prepare_spectrum_inputs(waveforms, configs)
-
+    batch = complex_spectrum.shape[0]
     groups = configs.dual_path_extension["parameters"]["groups"]
     inter_hidden_size = configs.dual_path_extension["parameters"]["inter_hidden_size"]
     num_modules = configs.dual_path_extension["num_modules"]
@@ -68,7 +33,8 @@ if __name__ == "__main__":
     frames = complex_spectrum.shape[1]
 
     in_hidden_state = [
-        [torch.zeros(1, batch * num_bands, inter_hidden_size // groups) for _ in range(groups)]
+        [torch.zeros(1, batch * num_bands, inter_hidden_size // groups).to(device=device, dtype=torch.float32)
+         for _ in range(groups)]
         for _ in range(num_modules)
     ]
 
