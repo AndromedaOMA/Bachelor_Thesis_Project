@@ -42,10 +42,10 @@ class VoiceBankDEMAND(Dataset):
         return {
             "noisy_waveform": noisy_waveform,
             "clean_waveform": clean_waveform,
-            "noisy_amplitude": noisy_amplitude,
-            "noisy_complex": noisy_complex,
-            "clean_amplitude": clean_amplitude,
-            "clean_complex": clean_complex,
+            "noisy_amplitude": noisy_amplitude.clone().detach().float(),
+            "noisy_complex": noisy_complex.clone().detach().float(),
+            "clean_amplitude": clean_amplitude.clone().detach().float(),
+            "clean_complex": clean_complex.clone().detach().float(),
         }
 
     def _process_waveform(self, signal):
