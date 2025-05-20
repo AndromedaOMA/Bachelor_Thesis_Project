@@ -11,6 +11,14 @@ from models.fspen import FullSubPathExtension
 from data.voicebank_demand_16K import VoiceBankDEMAND
 
 
+"""
+Loss: 0.051752, Train MSE: 0.040924
+Validation MSE: 0.0409
+Model improved. Saved.
+==============================
+Train MSE: 0.04092437628047548
+"""
+
 def prepare_initial_hidden_state(
         batch: int,
         num_bands: int,
