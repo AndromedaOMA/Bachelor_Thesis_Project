@@ -1,9 +1,13 @@
 import json
 import torch
+from datasets import load_dataset
 from thop import profile, clever_format
+from torch.utils.data import DataLoader
 
 from configs.train_configs import TrainConfig
 from models.fspen import FullSubPathExtension
+
+from data.voicebank_demand_16K import VoiceBankDEMAND
 
 
 def prepare_spectrum_inputs(waveforms: torch.Tensor, configs: TrainConfig):
@@ -32,23 +36,27 @@ def prepare_spectrum_inputs(waveforms: torch.Tensor, configs: TrainConfig):
     amplitude_spectrum = torch.abs(complex_spectrum)
     amplitude_spectrum = amplitude_spectrum.permute(0, 2, 1).unsqueeze(2)
 
-    # Convert complex spectrum to real (B, F, T, 2)
+    # Convert complex spectrum to real (B, F, T, 2) → (B, T, 2, F)
     complex_spectrum = torch.view_as_real(complex_spectrum)
-    # Rearrange to (B, T, 2, F)
     complex_spectrum = complex_spectrum.permute(0, 2, 3, 1)
 
-    # Final reshape: (B, T, 2, F)
+    # Final reshape: (B, T, C, F)
     return complex_spectrum, amplitude_spectrum
 
 
 if __name__ == "__main__":
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    print(f"device: {device}")
+
     configs = TrainConfig()
     with open("config.json", mode="w", encoding="utf-8") as file:
         json.dump(configs.__dict__, file, indent=4)
 
     model = FullSubPathExtension(configs)
 
-    batch = 32
+    # TODO: implement the VoiceBank_DEMAND class
+
+    batch = 1
     waveforms = torch.randn(batch, configs.train_points)
 
     complex_spectrum, amplitude_spectrum = prepare_spectrum_inputs(waveforms, configs)
