@@ -75,15 +75,6 @@ class VoiceBankDEMAND(Dataset):
         return signal
 
     def _prepare_spectrum_inputs(self, waveforms: torch.Tensor):
-        """
-        Compute STFT and format tensors for model input.
-        Args:
-            waveforms (torch.Tensor): (B, T)
-
-        Returns:
-            complex_spectrum: (B, T, 2, F)
-            amplitude_spectrum: (B, T, 1, F)
-        """
         B = waveforms.size(0)
 
         complex_spectrum = torch.stft(
@@ -107,7 +98,6 @@ if __name__ == "__main__":
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     configs = TrainConfig()
     dataset = VoiceBankDEMAND(device, configs)
-    print(f"dataset has {len(dataset)} samples!")
 
     sample = dataset[0]
     print(f"noisy_amplitude.shape: {sample['noisy_amplitude'].shape}")

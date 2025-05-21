@@ -18,6 +18,11 @@ Model improved. Saved. Current Train MSE: 0.0304. Current Test MSE: 0.0140
 Early stopping at epoch 34. Best Test MSE: 0.0140
 """
 
+""" best_model_0.0135
+Loss: 0.0313, Train MSE: 0.0296, Test MSE: 0.0135, Current learning rate: 0.0006
+Model improved. Saved. Current Train MSE: 0.0296. Current Test MSE: 0.0135
+"""
+
 
 def prepare_initial_hidden_state(
         batch: int,
@@ -84,7 +89,7 @@ def train_per_epoch(model, train_loader, test_loader, loss_fn, optimizer, schedu
         prediction = model(complex_input, amplitude_input, hidden_state)
         predicted_complex = prediction[0]  # shape: [B, T, 2, F]
         predicted_amplitude = torch.sqrt(
-            predicted_complex[:, :, 0, :] ** 2 + predicted_complex[:, :, 1, :] ** 2
+            predicted_complex[:, :, 0, :] ** 2 + predicted_complex[:, :, 1, :] ** 2  # Re-compute the predicted_amplitude
         ).unsqueeze(2)  # shape: [B, T, 1, F]
         loss = loss_fn(predicted_amplitude, target)
 
@@ -155,8 +160,7 @@ if __name__ == "__main__":
     # print(f"noisy_complex.shape: {sample['noisy_complex'].shape}")
     # print(f"clean_amplitude.shape: {sample['clean_amplitude'].shape}")
     # print(f"clean_complex.shape: {sample['clean_complex'].shape}")
-
-    print("=======" * 10)
+    # print("=======" * 10)
 
     complex_spectrum = sample["noisy_complex"].to(device=device, dtype=torch.float32)       # (B=1, T, 2, F)
     amplitude_spectrum = sample["noisy_amplitude"].to(device=device, dtype=torch.float32)   # (B=1, T, 1, F)
