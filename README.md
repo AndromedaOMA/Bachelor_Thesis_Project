@@ -23,7 +23,7 @@ Also, this architecture is ultra-lightweight (79K parameters) and allows for rap
 
 For better clarity of the statistics, we provide you with plot graphs that will highlight the quality and efficiency of the FSPEN model in comparison to other models with the same objective (data are taken from [link]([url](https://research.samsung.com/blog/FSPEN-AN-ULTRA-LIGHTWEIGHT-NETWORK-FOR-REAL-TIME-SPEECH-ENAHNCMENT))). Figure 3.5.1 presents the PESQ and STOI metrics for the models:
 
-<img src="https://github.com/user-attachments/assets/383e380b-feea-41a0-b9ed-cf00f404c980" alt="Model Diagram" width="600" align="right">
+<img src="https://github.com/user-attachments/assets/383e380b-feea-41a0-b9ed-cf00f404c980" alt="Model Diagram" width="500" align="right">
 
 | Model             | Parameters |
 |------------------|------------|
