@@ -11,6 +11,7 @@
 --------------------------------------------------------------------------------
 <h1 id="project" align="left">🤖 About Project</h1>
 
+In other words, this project will adjust and adapt in real time the hearing depending on the environment with the emphasis on the quality of the conversation. There are already technologies that address this topic, but most of them focus on canceling background noise ("noise reduction"), thus leaving only human sounds/conversations to be heard, without any intervention on human voices. This project will focus strictly on finding a more efficient solution based on the provided model.
 
 ---
 
