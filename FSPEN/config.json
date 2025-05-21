@@ -2,12 +2,12 @@
     "sample_rate": 16000,
     "n_fft": 512,
     "hop_length": 256,
-    "sample_length": 16000,
+    "sample_length": 32000,
     "train_frames": 62,
     "train_points": 15616,
     "batch_size": 32,
     "epochs": 100,
-    "learning_rate": 0.01,
+    "learning_rate": 0.001,
     "full_band_encoder": {
         "encoder1": {
             "in_channels": 2,

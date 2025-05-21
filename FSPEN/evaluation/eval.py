@@ -27,7 +27,7 @@ if __name__ == "__main__":
     configs = TrainConfig()
     model = FullSubPathExtension(configs).to(device)
     model.eval()
-    state_dict = torch.load("../best_model_0.0135.pth")
+    state_dict = torch.load("../best_model_0.0676.pth")
     filtered_state_dict = {k: v for k, v in state_dict.items() if
                            k in model.state_dict() and model.state_dict()[k].shape == v.shape}
     model.load_state_dict(state_dict)
@@ -63,8 +63,7 @@ if __name__ == "__main__":
                                           window=window,
                                           center=True,
                                           normalized=False,
-                                          onesided=True,
-                                          length=64000)
+                                          onesided=True)
                 clean_np = clean.squeeze(1).cpu().numpy()
                 noisy_np = noisy.squeeze(1).cpu().numpy()
                 audio_recon_np = audio_recon.cpu().numpy()

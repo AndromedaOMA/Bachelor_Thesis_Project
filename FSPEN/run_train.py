@@ -11,16 +11,23 @@ from models.fspen import FullSubPathExtension
 from data.voicebank_demand_16K import VoiceBankDEMAND
 
 
-""" best_model_0.0140
+""" best_model_0.0140 -> 1 s
 Loss: 0.0207, Train MSE: 0.0304, Test MSE: 0.0140, Current learning rate: 0.0021
 Model improved. Saved. Current Train MSE: 0.0304. Current Test MSE: 0.0140
 ==============================
 Early stopping at epoch 34. Best Test MSE: 0.0140
 """
 
-""" best_model_0.0135
+""" best_model_0.0135 -> 1 s
 Loss: 0.0313, Train MSE: 0.0296, Test MSE: 0.0135, Current learning rate: 0.0006
 Model improved. Saved. Current Train MSE: 0.0296. Current Test MSE: 0.0135
+"""
+
+""" best_model_0.0676 -> 3 s
+Loss: 0.1345, Train MSE: 0.1002, Test MSE: 0.0676, Current learning rate: 0.0000
+Model improved. Saved. Current Train MSE: 0.1002. Current Test MSE: 0.0676
+==============================
+Early stopping at epoch 63. Best Test MSE: 0.0676
 """
 
 
@@ -41,14 +48,14 @@ def prepare_initial_hidden_state(
 
 def train(model, train_loader, test_loader, loss_fn, optimizer, scheduler, device, epochs, configs):
     patience = 10
-    best_mse = float("inf")
+    best_test_mse = float("inf")
     no_improve_epochs = 0
 
     for epoch in range(epochs):
         print(f"=== Epoch: {epoch + 1}/{epochs} ===")
         train_mse, test_mse = train_per_epoch(model, train_loader, test_loader, loss_fn, optimizer, scheduler, device)
 
-        if test_mse < best_mse:
+        if test_mse < best_test_mse:
             best_test_mse = test_mse
             no_improve_epochs = 0
             torch.save(model.state_dict(), "best_model.pth")
@@ -66,6 +73,7 @@ def train(model, train_loader, test_loader, loss_fn, optimizer, scheduler, devic
 
 def train_per_epoch(model, train_loader, test_loader, loss_fn, optimizer, scheduler, device):
     model.train()
+    torch.autograd.set_detect_anomaly(True)
 
     for batch in tqdm(train_loader):
         complex_input = batch["noisy_complex"].to(device).float().squeeze(1)
@@ -89,12 +97,13 @@ def train_per_epoch(model, train_loader, test_loader, loss_fn, optimizer, schedu
         prediction = model(complex_input, amplitude_input, hidden_state)
         predicted_complex = prediction[0]  # shape: [B, T, 2, F]
         predicted_amplitude = torch.sqrt(
-            predicted_complex[:, :, 0, :] ** 2 + predicted_complex[:, :, 1, :] ** 2  # Re-compute the predicted_amplitude
+            predicted_complex[:, :, 0, :] ** 2 + predicted_complex[:, :, 1, :] ** 2 + 1e-8  # Re-compute the predicted_amplitude
         ).unsqueeze(2)  # shape: [B, T, 1, F]
         loss = loss_fn(predicted_amplitude, target)
 
         optimizer.zero_grad()
         loss.backward()
+        # torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=5.0)
         optimizer.step()
         scheduler.step()
 
@@ -134,7 +143,7 @@ def check_mse(data_loader, model, loss_fn, device, configs):
             prediction = model(complex_input, amplitude_input, hidden_state)
             predicted_complex = prediction[0]  # shape: [B, T, 2, F]
             predicted_amplitude = torch.sqrt(
-                predicted_complex[:, :, 0, :] ** 2 + predicted_complex[:, :, 1, :] ** 2
+                predicted_complex[:, :, 0, :] ** 2 + predicted_complex[:, :, 1, :] ** 2 + 1e-8  # Re-compute the predicted_amplitude
             ).unsqueeze(2)  # shape: [B, T, 1, F]
             loss = loss_fn(predicted_amplitude, target)
 
@@ -188,9 +197,6 @@ if __name__ == "__main__":
 
     loss_fn = nn.MSELoss()
     optimiser = torch.optim.Adam(model.parameters(), lr=configs.learning_rate, betas=(0.9, 0.999))
-    # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimiser, T_0=10, T_mult=2)
 
     train(model, train_loader, test_loader, loss_fn, optimiser, scheduler, device, configs.epochs, configs)
-
-    torch.save(model.state_dict(), "FSPEN.pth")

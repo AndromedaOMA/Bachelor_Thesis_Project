@@ -42,6 +42,8 @@ class VoiceBankDEMAND(Dataset):
 
         noisy_complex, noisy_amplitude = self._prepare_spectrum_inputs(noisy_waveform)
         clean_complex, clean_amplitude = self._prepare_spectrum_inputs(clean_waveform)
+        # print(f"noisy_amplitude: mean={noisy_amplitude.mean().item()}, std={noisy_amplitude.std().item()}")
+        # print(f"noisy_complex: mean={noisy_complex.mean().item()}, std={noisy_complex.std().item()}")
 
         return {
             "noisy_waveform": noisy_waveform,
@@ -87,6 +89,7 @@ class VoiceBankDEMAND(Dataset):
 
         amplitude_spectrum = torch.abs(complex_spectrum)
         amplitude_spectrum = amplitude_spectrum.permute(0, 2, 1).unsqueeze(2)
+        amplitude_spectrum = (amplitude_spectrum - amplitude_spectrum.mean()) / (amplitude_spectrum.std() + 1e-5)
 
         complex_spectrum = torch.view_as_real(complex_spectrum)
         complex_spectrum = complex_spectrum.permute(0, 2, 3, 1)
@@ -100,6 +103,8 @@ if __name__ == "__main__":
     dataset = VoiceBankDEMAND(device, configs)
 
     sample = dataset[0]
+    print(f"noisy_waveform.shape: {sample['noisy_waveform'].shape}")
+    print(f"clean_waveform.shape: {sample['clean_waveform'].shape}")
     print(f"noisy_amplitude.shape: {sample['noisy_amplitude'].shape}")
     print(f"noisy_complex.shape: {sample['noisy_complex'].shape}")
     print(f"clean_amplitude.shape: {sample['clean_amplitude'].shape}")
