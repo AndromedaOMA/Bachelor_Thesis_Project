@@ -1,10 +1,10 @@
 import torch
 
 from torch import nn, Tensor
-from modules.en_decoder import (FullBandEncoderBlock, FullBandDecoderBlock,
+from FSPEN.modules.en_decoder import (FullBandEncoderBlock, FullBandDecoderBlock,
                                 SubBandEncoderBlock, SubBandDecoderBlock)
-from modules.sequence_modules import DualPathExtensionRNN
-from configs.train_configs import TrainConfig
+from FSPEN.modules.sequence_modules import DualPathExtensionRNN
+from FSPEN.configs.train_configs import TrainConfig
 
 
 class FullBandEncoder(nn.Module):
