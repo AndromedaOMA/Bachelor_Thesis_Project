@@ -6,7 +6,7 @@
     "train_frames": 62,
     "train_points": 15616,
     "batch_size": 32,
-    "epochs": 10,
+    "epochs": 100,
     "learning_rate": 0.01,
     "full_band_encoder": {
         "encoder1": {

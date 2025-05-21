@@ -7,7 +7,7 @@ from FSPEN.configs.train_configs import TrainConfig
 
 
 class VoiceBankDEMAND(Dataset):
-    def __init__(self, device, configs: TrainConfig):
+    def __init__(self, device, configs: TrainConfig, mode='train'):
         self.device = device
         self.configs = configs
         self.ds = load_dataset("JacobLinCool/VoiceBank-DEMAND-16k")
@@ -15,27 +15,31 @@ class VoiceBankDEMAND(Dataset):
         self.num_samples = configs.sample_length
         self.train_data = self.ds["train"]
         self.test_data = self.ds["test"]
+        self.mode = mode
 
     def __len__(self):
-        return len(self.train_data) + len(self.test_data)
+        if self.mode == 'train':
+            return len(self.train_data)
+        else:
+            return len(self.test_data)
 
     def __getitem__(self, index):
-        noisy = self.train_data[index]['noisy']
-        clean = self.train_data[index]['clean']
+        if self.mode == 'train':
+            data = self.train_data
+        else:
+            data = self.test_data
+        noisy = data[index]['noisy']
+        clean = data[index]['clean']
 
-        # Convert to tensor
         noisy_waveform = torch.tensor(noisy['array']).unsqueeze(0)
         clean_waveform = torch.tensor(clean['array']).unsqueeze(0)
 
-        # Preprocess
         noisy_waveform = self._process_waveform(noisy_waveform)
         clean_waveform = self._process_waveform(clean_waveform)
 
-        # (1, T) → (B=1, T)
         noisy_waveform = noisy_waveform.to(self.device).squeeze(0).unsqueeze(0)
         clean_waveform = clean_waveform.to(self.device).squeeze(0).unsqueeze(0)
 
-        # Compute spectra
         noisy_complex, noisy_amplitude = self._prepare_spectrum_inputs(noisy_waveform)
         clean_complex, clean_amplitude = self._prepare_spectrum_inputs(clean_waveform)
 

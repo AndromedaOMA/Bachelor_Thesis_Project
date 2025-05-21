@@ -12,12 +12,12 @@ from data.voicebank_demand_16K import VoiceBankDEMAND
 
 
 """
-Loss: 0.051752, Train MSE: 0.040924
-Validation MSE: 0.0409
+Loss: 0.051752, Train MSE: 0.0409
 Model improved. Saved.
 ==============================
 Train MSE: 0.04092437628047548
 """
+
 
 def prepare_initial_hidden_state(
         batch: int,
@@ -34,36 +34,36 @@ def prepare_initial_hidden_state(
     ]
 
 
-def train(model, data_loader, loss_fn, optimizer, device, epochs, configs):
+def train(model, train_loader, test_loader, loss_fn, optimizer, device, epochs, configs):
     patience = 10
     best_mse = float("inf")
     no_improve_epochs = 0
 
     for epoch in range(epochs):
         print(f"=== Epoch: {epoch + 1}/{epochs} ===")
-        train_per_epoch(model, data_loader, loss_fn, optimizer, device)
+        train_per_epoch(model, train_loader, test_loader, loss_fn, optimizer, device)
 
-        mse = check_mse(data_loader, model, loss_fn, device, configs)
-        print(f"Validation MSE: {mse:.4f}")
+        train_mse = check_mse(train_loader, model, loss_fn, device, configs)
+        test_mse = check_mse(test_loader, model, loss_fn, device, configs)
 
-        if mse < best_mse:
-            best_mse = mse
+        if test_mse < best_mse:
+            best_mse = test_mse
             no_improve_epochs = 0
             torch.save(model.state_dict(), "best_model.pth")
-            print(f"Model improved. Saved.")
+            print(f"Model improved. Saved. Current Train_MSE: {test_mse:.4f}")
         else:
             no_improve_epochs += 1
             print(f"No improvement for {no_improve_epochs} epochs.")
             if no_improve_epochs >= patience:
-                print(f"Early stopping at epoch {epoch + 1}")
+                print(f"Early stopping at epoch {epoch + 1}. Best Train MSE: {best_mse:.4f}")
                 break
         print("===" * 10)
 
 
-def train_per_epoch(model, data_loader, loss_fn, optimizer, device):
+def train_per_epoch(model, train_loader, test_loader, loss_fn, optimizer, device):
     model.train()
 
-    for batch in tqdm(data_loader):
+    for batch in tqdm(train_loader):
         complex_input = batch["noisy_complex"].to(device).float().squeeze(1)
         amplitude_input = batch["noisy_amplitude"].to(device).float().squeeze(1)
         target = batch["clean_amplitude"].to(device).float().squeeze(1)
@@ -90,29 +90,10 @@ def train_per_epoch(model, data_loader, loss_fn, optimizer, device):
         loss.backward()
         optimizer.step()
 
-    train_mse = check_mse(data_loader, model, loss_fn, device, configs)
+    train_mse = check_mse(train_loader, model, loss_fn, device, configs)
+    test_mse = check_mse(test_loader, model, loss_fn, device, configs)
 
-    print(f"Loss: {loss.item():.6f}, Train MSE: {train_mse:.6f}")
-
-
-# def check_acc(data_loader, model):
-#     no_correct = 0
-#     no_samples = 0
-#     model.eval()
-#
-#     with torch.no_grad():
-#         for input, target in data_loader:
-#             input, target = input.to(device), target.to(device)
-#
-#             prediction = model(input)
-#             predicted_labels = prediction.argmax(dim=1)
-#
-#             no_correct += (predicted_labels == target).sum().item()
-#             no_samples += target.size(0)
-#
-#     train_acc = no_correct / no_samples
-#     model.train()
-#     return train_acc
+    print(f"Loss: {loss.item():.4f}, Train MSE: {train_mse:.4f}, Test MSE: {test_mse:.4f}")
 
 
 def check_mse(data_loader, model, loss_fn, device, configs):
@@ -159,10 +140,10 @@ if __name__ == "__main__":
     dataset = VoiceBankDEMAND(device, configs)
     print(f"dataset has {len(dataset)} samples!")
     sample = dataset[0]
-    print(f"noisy_amplitude.shape: {sample['noisy_amplitude'].shape}")
-    print(f"noisy_complex.shape: {sample['noisy_complex'].shape}")
-    print(f"clean_amplitude.shape: {sample['clean_amplitude'].shape}")
-    print(f"clean_complex.shape: {sample['clean_complex'].shape}")
+    # print(f"noisy_amplitude.shape: {sample['noisy_amplitude'].shape}")
+    # print(f"noisy_complex.shape: {sample['noisy_complex'].shape}")
+    # print(f"clean_amplitude.shape: {sample['clean_amplitude'].shape}")
+    # print(f"clean_complex.shape: {sample['clean_complex'].shape}")
 
     print("=======" * 10)
 
@@ -183,21 +164,16 @@ if __name__ == "__main__":
 
     print("=======" * 10)
 
-    train_subset = dataset.train_data
-    test_subset = dataset.test_data
-
-    train_dataset = torch.utils.data.Subset(dataset, range(len(train_subset)))
-    test_dataset = torch.utils.data.Subset(dataset, range(len(train_subset), len(dataset)))
+    train_dataset = VoiceBankDEMAND(device, configs, mode="train")
+    test_dataset = VoiceBankDEMAND(device, configs, mode="test")
 
     train_loader = DataLoader(train_dataset, batch_size=configs.batch_size, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=configs.batch_size)
 
     loss_fn = nn.MSELoss()
-    optimiser = torch.optim.Adam(model.parameters(), lr=1e-3, betas=(0.9, 0.999))
+    optimiser = torch.optim.Adam(model.parameters(), lr=configs.learning_rate, betas=(0.9, 0.999))
     # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
 
-    train(model, train_loader, loss_fn, optimiser, device, configs.epochs, configs)
+    train(model, train_loader, test_loader, loss_fn, optimiser, device, configs.epochs, configs)
 
-    mse = check_mse(train_loader, model, loss_fn, device, configs)
-    print(f"Train MSE: {mse}")
     torch.save(model.state_dict(), "FSPEN.pth")

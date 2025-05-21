@@ -26,7 +26,7 @@ class TrainConfig(BaseModel):
 
     """train"""
     batch_size: int = 32
-    epochs: int = 10
+    epochs: int = 100
     learning_rate: float = 0.01
 
     full_band_encoder: Dict[str, dict] = {
