@@ -35,6 +35,13 @@ For better clarity of the statistics, we provide you with plot graphs that will 
 | PercepNet        | 8 M        |
 | FSPEN            | 79 K       |
 
+The FSPEN architecture is made up of three major components that, combined, bring efficiency to the forefront when processing audio files, as highlighted in Figure 3.5.4. These are:
+
+  1. *The encoding module*: this, in turn, is divided into a sub-band encoder and a full-band encoder, which will lead to a capture of global and local features.
+  2. *Dual Path Amplifier with Inter-Frame Path Extension (DPE) module*: improves network shaping capability while maintaining/keeping complexity low.
+  3. *Decoding module*: like the encoding module, it is divided, this time into a sub-band decoder and a full-band decoder, the two decoders obtain the complexity spectrum mask and the magnitude spectrum mask.
+     
+<img src="https://github.com/user-attachments/assets/9576cc8c-a42b-4bb6-83b9-f0a18baff4f4" alt="Model Diagram" width="600" align="center">
 
 
 ---
@@ -60,7 +67,7 @@ The training and testing of the model will be done through two partitions:
 ---
 
 > 📝 **Note**:  
-> By completing this bachelor's thesis, I am completing my bachelor's studies at the Faculty of Computer Sciences in Iași.
+> By completing this bachelor's thesis, I am completing my bachelor's studies at the Faculty of Computer Sciences in Iași.<br/>
 > The model architecture is taken from [here](https://research.samsung.com/blog/FSPEN-AN-ULTRA-LIGHTWEIGHT-NETWORK-FOR-REAL-TIME-SPEECH-ENAHNCMENT).
 
 * [Table Of Content](#table-of-content)
