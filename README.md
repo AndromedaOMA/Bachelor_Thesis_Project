@@ -41,7 +41,13 @@ For better clarity of the statistics, we provide you with plot graphs that will 
 
 <h1 id="dataset" align="left">📄 Dataset</h1>
 
+In this case, we will approach the labeled dataset type. More specifically, we will work with the **VoiceBank + DEMAND** dataset that we can find [here](https://huggingface.co/datasets/JacobLinCool/VoiceBank-DEMAND-16k). This dataset will provide us with two types of audio files, each with a sampling rate of 16kHz:
+  1. Audio files containing clear human conversations/voices ("clear speech" in English).
+  2. Audio files containing unclear/noisy human conversations/voices ("noisy speech" in English) of background sounds that simulate real situations such as the noises we hear in everyday life in environments such as traffic, closed/open rooms, etc.
 
+The training and testing of the model will be done through two partitions:
+  1. The training partition containing a number of 11.6K data.
+  2. The testing partition containing a number of 824 data.
 
 ---
 
