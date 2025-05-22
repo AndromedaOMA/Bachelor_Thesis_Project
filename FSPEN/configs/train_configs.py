@@ -21,10 +21,11 @@ class TrainConfig(BaseModel):
     n_fft: int = 512
     hop_length: int = 256
     # sample_length: int = 16000  # 1 sec
-    # sample_length: int = 32000  # 2 sec
-    sample_length: int = 64000  # 4 sec
+    sample_length: int = 32000  # 2 sec
+    # sample_length: int = 64000  # 4 sec
     train_frames: int = 62
     train_points: int = (train_frames - 1) * hop_length
+    input_freq_bins: int = 257
 
     """train"""
     batch_size: int = 32
@@ -63,8 +64,13 @@ class TrainConfig(BaseModel):
 
     dual_path_extension: dict = {
         "num_modules": 3,
-        "parameters": {"input_size": 16, "intra_hidden_size": 16, "inter_hidden_size": 16,
-                       "groups": 8, "rnn_type": "GRU"}
+        "parameters": {"input_size": 16,
+                       "intra_hidden_size": 16,
+                       "inter_hidden_size": 16,
+                       "groups": 8,
+                       "rnn_type": "GRU",
+                       # "rnn_type": "SRU"
+                       }
     }
 
     @field_validator("sub_band_decoder")

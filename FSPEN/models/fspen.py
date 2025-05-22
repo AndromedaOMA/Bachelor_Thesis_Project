@@ -1,9 +1,12 @@
 import torch
 
 from torch import nn, Tensor
+
+from FSPEN.modules.attention_modules import FrequencyAttention
 from FSPEN.modules.en_decoder import (FullBandEncoderBlock, FullBandDecoderBlock,
-                                SubBandEncoderBlock, SubBandDecoderBlock)
+                                      SubBandEncoderBlock, SubBandDecoderBlock)
 from FSPEN.modules.sequence_modules import DualPathExtensionRNN
+# from FSPEN.modules.modified_sequence_modules import DualPathExtensionRNN
 from FSPEN.configs.train_configs import TrainConfig
 
 
@@ -103,15 +106,17 @@ class FullSubPathExtension(nn.Module):
         self.full_band_encoder = FullBandEncoder(configs)
         self.sub_band_encoder = SubBandEncoder(configs)
 
+        self.freq_attention = FrequencyAttention(freq_bins=configs.input_freq_bins)
+
         merge_split = configs.merge_split
         merge_channels = merge_split["channels"]
         merge_bands = merge_split["bands"]
         compress_rate = merge_split["compress_rate"]
 
         self.feature_merge_layer = nn.Sequential(
-            nn.Linear(in_features=merge_channels, out_features=merge_channels//compress_rate),
+            nn.Linear(in_features=merge_channels, out_features=merge_channels // compress_rate),
             nn.ELU(),
-            nn.Conv1d(in_channels=merge_bands, out_channels=merge_bands//compress_rate, kernel_size=1, stride=1)
+            nn.Conv1d(in_channels=merge_bands, out_channels=merge_bands // compress_rate, kernel_size=1, stride=1)
         )
 
         self.dual_path_extension_rnn_list = nn.ModuleList()
@@ -119,8 +124,8 @@ class FullSubPathExtension(nn.Module):
             self.dual_path_extension_rnn_list.append(DualPathExtensionRNN(**configs.dual_path_extension["parameters"]))
 
         self.feature_split_layer = nn.Sequential(
-            nn.Conv1d(in_channels=merge_bands//compress_rate, out_channels=merge_bands, kernel_size=1, stride=1),
-            nn.Linear(in_features=merge_channels//compress_rate, out_features=merge_channels),
+            nn.Conv1d(in_channels=merge_bands // compress_rate, out_channels=merge_bands, kernel_size=1, stride=1),
+            nn.Linear(in_features=merge_channels // compress_rate, out_features=merge_channels),
             nn.ELU()
         )
 
@@ -141,7 +146,11 @@ class FullSubPathExtension(nn.Module):
 
         batch, frames, channels, frequency = in_complex_spectrum.shape
         complex_spectrum = torch.reshape(in_complex_spectrum, shape=(batch * frames, channels, frequency))
-        amplitude_spectrum = torch.reshape(in_amplitude_spectrum, shape=(batch*frames, 1, frequency))
+        amplitude_spectrum = torch.reshape(in_amplitude_spectrum, shape=(batch * frames, 1, frequency))
+        # amplitude_spectrum = self.freq_attention(in_amplitude_spectrum)
+
+        # print(f"amplitude_spectrum: {amplitude_spectrum}")
+        # print(f"amplitude_spectrum.shape: {amplitude_spectrum.shape}")
 
         full_band_encode_outs, global_feature = self.full_band_encoder(complex_spectrum)
         sub_band_encode_outs, local_feature = self.sub_band_encoder(amplitude_spectrum)

@@ -12,6 +12,8 @@ from typing import List
 import torch
 from torch import nn, Tensor
 
+from sru import SRU
+
 
 class GroupRNN(nn.Module):
     def __init__(self, input_size: int,
@@ -28,11 +30,24 @@ class GroupRNN(nn.Module):
         self.groups = groups
         self.rnn_list = nn.ModuleList()
         for _ in range(groups):
-            self.rnn_list.append(
-                getattr(nn, rnn_type)(input_size=input_size // groups, hidden_size=hidden_size//groups,
-                                      num_layers=num_layers,
-                                      bidirectional=bidirectional, batch_first=batch_first)
-            )
+            if rnn_type == 'SRU':
+                self.rnn_list.append(
+                    SRU(input_size=input_size // groups,
+                        hidden_size=hidden_size // groups,
+                        num_layers=num_layers,  # number of stacking RNN layers
+                        dropout=0.05,  # dropout applied between RNN layers
+                        bidirectional=bidirectional,  # bidirectional RNN
+                        layer_norm=False,  # apply layer normalization on the output of each layer
+                        highway_bias=-2)  # initial bias of highway gate (<= 0)
+                )
+            else:
+                self.rnn_list.append(
+                    getattr(nn, rnn_type)(input_size=input_size // groups,
+                                          hidden_size=hidden_size // groups,
+                                          num_layers=num_layers,
+                                          bidirectional=bidirectional,
+                                          batch_first=batch_first)
+                )
 
     def forward(self, inputs: Tensor, hidden_state: List[Tensor]):
         """
@@ -64,11 +79,23 @@ class DualPathExtensionRNN(nn.Module):
                  groups: int,
                  rnn_type: str):
         super().__init__()
-        assert rnn_type in ["RNN", "GRU", "LSTM"], f"rnn_type should be RNN/GRU/LSTM, but got {rnn_type}!"
+        assert rnn_type in ["SRU", "RNN", "GRU", "LSTM"], f"rnn_type should be SRU/RNN/GRU/LSTM, but got {rnn_type}!"
 
-        self.intra_chunk_rnn = getattr(nn, rnn_type)(input_size=input_size, hidden_size=intra_hidden_size,
-                                                     num_layers=1, bidirectional=True, batch_first=True)
-        self.intra_chunk_fc = nn.Linear(in_features=intra_hidden_size*2, out_features=input_size)
+        if rnn_type == 'SRU':
+            self.intra_chunk_rnn = SRU(input_size=input_size,
+                                       hidden_size=intra_hidden_size,
+                                       num_layers=1,        # number of stacking RNN layers
+                                       dropout=0.05,        # dropout applied between RNN layers
+                                       bidirectional=True,  # bidirectional RNN
+                                       layer_norm=False,    # apply layer normalization on the output of each layer
+                                       highway_bias=-2)     # initial bias of highway gate (<= 0)
+        else:
+            self.intra_chunk_rnn = getattr(nn, rnn_type)(input_size=input_size,
+                                                         hidden_size=intra_hidden_size,
+                                                         num_layers=1,
+                                                         bidirectional=True,
+                                                         batch_first=True)
+        self.intra_chunk_fc = nn.Linear(in_features=intra_hidden_size * 2, out_features=input_size)
         self.intra_chunk_norm = nn.LayerNorm(normalized_shape=input_size, elementwise_affine=True)
 
         self.inter_chunk_rnn = GroupRNN(input_size=input_size, hidden_size=inter_hidden_size, groups=groups,
@@ -108,5 +135,5 @@ if __name__ == "__main__":
     test_model = DualPathExtensionRNN(input_size=32, intra_hidden_size=16, inter_hidden_size=16,
                                       groups=8, rnn_type="LSTM")
     test_data = torch.randn(5, 32, 10, 32)
-    test_state = [(torch.randn(1, 5*32, 16), torch.randn(1, 5*32, 16)) for _ in range(8)]
+    test_state = [(torch.randn(1, 5 * 32, 16), torch.randn(1, 5 * 32, 16)) for _ in range(8)]
     test_out = test_model(test_data, test_state)
