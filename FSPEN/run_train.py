@@ -10,6 +10,17 @@ from models.fspen import FullSubPathExtension
 
 from data.voicebank_demand_16K import VoiceBankDEMAND
 
+""" best_model_0.0502 -> 4s (Worse! Too much padding resulted in the human voice being thickened)
+Loss: 0.0736, Train MSE: 0.0846, Test MSE: 0.0502, Current learning rate: 0.0001
+Model improved. Saved. Current Train MSE: 0.0846. Current Test MSE: 0.0502
+"""
+
+""" best_model_0.0676 -> 2 s (Ideal beacause its samples does not have too much paddings)
+Loss: 0.1345, Train MSE: 0.1002, Test MSE: 0.0676, Current learning rate: 0.0000
+Model improved. Saved. Current Train MSE: 0.1002. Current Test MSE: 0.0676
+==============================
+Early stopping at epoch 63. Best Test MSE: 0.0676
+"""
 
 """ best_model_0.0140 -> 1 s
 Loss: 0.0207, Train MSE: 0.0304, Test MSE: 0.0140, Current learning rate: 0.0021
@@ -21,13 +32,6 @@ Early stopping at epoch 34. Best Test MSE: 0.0140
 """ best_model_0.0135 -> 1 s
 Loss: 0.0313, Train MSE: 0.0296, Test MSE: 0.0135, Current learning rate: 0.0006
 Model improved. Saved. Current Train MSE: 0.0296. Current Test MSE: 0.0135
-"""
-
-""" best_model_0.0676 -> 3 s
-Loss: 0.1345, Train MSE: 0.1002, Test MSE: 0.0676, Current learning rate: 0.0000
-Model improved. Saved. Current Train MSE: 0.1002. Current Test MSE: 0.0676
-==============================
-Early stopping at epoch 63. Best Test MSE: 0.0676
 """
 
 

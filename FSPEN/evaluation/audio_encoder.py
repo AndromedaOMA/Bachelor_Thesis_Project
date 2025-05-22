@@ -27,7 +27,7 @@ if __name__ == "__main__":
     configs = TrainConfig()
     model = FullSubPathExtension(configs).to(device)
     model.eval()
-    state_dict = torch.load("../best_model_0.0676.pth")
+    state_dict = torch.load("../best_model_0.0502.pth")
     filtered_state_dict = {k: v for k, v in state_dict.items() if
                            k in model.state_dict() and model.state_dict()[k].shape == v.shape}
     model.load_state_dict(state_dict)
@@ -71,7 +71,8 @@ if __name__ == "__main__":
                 print(f"noisy shape: {noisy.shape}")
                 print(f"audio_recon shape: {audio_recon.shape}")
 
+            out_dir = 'outputs/4sec_samples'
             for b in range(batch_size):
-                sf.write(f'outputs/enhanced/enhanced_{i}_{b}.wav', audio_recon_np[b], 16000)
-                sf.write(f'outputs/clean/clean_{i}_{b}.wav', clean_np[b], 16000)
-                sf.write(f'outputs/noisy/noisy_{i}_{b}.wav', noisy_np[b], 16000)
+                sf.write(f'{out_dir}/enhanced/enhanced_{i}_{b}.wav', audio_recon_np[b], 16000)
+                sf.write(f'{out_dir}/clean/clean_{i}_{b}.wav', clean_np[b], 16000)
+                sf.write(f'{out_dir}/noisy/noisy_{i}_{b}.wav', noisy_np[b], 16000)
