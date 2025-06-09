@@ -43,7 +43,7 @@ The FSPEN architecture is made up of three major components that, combined, brin
      
 <img src="https://github.com/user-attachments/assets/9576cc8c-a42b-4bb6-83b9-f0a18baff4f4" alt="Model Diagram" width="600" align="center">
 </br>
-**FullSubPathExtension(FSPEN) profile**</br>
+<h3>FullSubPathExtension(FSPEN) profile</h3>
 [INFO] Register count_convNd() for <class 'torch.nn.modules.conv.Conv1d'>.</br>
 [INFO] Register count_normalization() for <class 'torch.nn.modules.batchnorm.BatchNorm1d'>.</br>
 [INFO] Register zero_ops() for <class 'torch.nn.modules.activation.ReLU'>.</br>
@@ -53,11 +53,11 @@ The FSPEN architecture is made up of three major components that, combined, brin
 [INFO] Register count_normalization() for <class 'torch.nn.modules.normalization.LayerNorm'>.</br>
 [INFO] Register count_convNd() for <class 'torch.nn.modules.conv.ConvTranspose1d'>.</br>
 </br>
-**Original FSPEN Model**</br>
+<h3>Original FSPEN Model</h3>
 FLOPs: 152.7967M</br>
 Params: 34.7960K</br>
 </br>
-**Modiffied FSPEN Model [FrequencyAttention that includes a MultiheadAttention]**</br>
+<h3>Modiffied FSPEN Model [FrequencyAttention that includes a MultiheadAttention]</h3>
 FLOPs: 154.8691M</br>
 Params: 34.8930K</br>
 
