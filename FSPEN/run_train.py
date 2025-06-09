@@ -195,7 +195,7 @@ if __name__ == "__main__":
     # # FullSubPathExtension profile
     # flops, params = profile(model, inputs=(complex_spectrum, amplitude_spectrum, in_hidden_state))
     # flops, params = clever_format([flops, params], format="%0.4f")
-    # print(f"FLOPs: {flops}\nParams: {params}")
+    # print(f"Original FSPEN Model\nFLOPs: {flops}\nParams: {params}")
 
     print("=======" * 10)
 
