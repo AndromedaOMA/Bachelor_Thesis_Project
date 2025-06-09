@@ -147,7 +147,7 @@ class FullSubPathExtension(nn.Module):
         batch, frames, channels, frequency = in_complex_spectrum.shape
         complex_spectrum = torch.reshape(in_complex_spectrum, shape=(batch * frames, channels, frequency))
         amplitude_spectrum = torch.reshape(in_amplitude_spectrum, shape=(batch * frames, 1, frequency))
-        # amplitude_spectrum = self.freq_attention(in_amplitude_spectrum)
+        amplitude_spectrum = self.freq_attention(amplitude_spectrum)
 
         # print(f"amplitude_spectrum: {amplitude_spectrum}")
         # print(f"amplitude_spectrum.shape: {amplitude_spectrum.shape}")

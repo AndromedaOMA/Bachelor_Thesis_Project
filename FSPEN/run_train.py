@@ -4,15 +4,21 @@ from thop import profile, clever_format
 from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+from torch_pesq import PesqLoss
 
 from configs.train_configs import TrainConfig
 from models.fspen import FullSubPathExtension
 
 from data.voicebank_demand_16K import VoiceBankDEMAND
 
-""" best_model_0.0502 -> 4s (Worse! Too much padding resulted in the human voice being thickened)
+""" best_model_0.0502 -> 4s (WORSE! Too much padding resulted in the human voice being thickened)
 Loss: 0.0736, Train MSE: 0.0846, Test MSE: 0.0502, Current learning rate: 0.0001
 Model improved. Saved. Current Train MSE: 0.0846. Current Test MSE: 0.0502
+"""
+
+""" best_model_0.0613 -> 2 s (+ MultiheadAttention) [Trained for all 100 epochs!]
+Loss: 0.0915, Train MSE: 0.0900, Test MSE: 0.0613, Current learning rate: 0.0001
+Model improved. Saved. Current Train MSE: 0.0900. Current Test MSE: 0.0613
 """
 
 """ best_model_0.0676 -> 2 s (Ideal beacause its samples does not have too much paddings)
@@ -62,7 +68,7 @@ def train(model, train_loader, test_loader, loss_fn, optimizer, scheduler, devic
         if test_mse < best_test_mse:
             best_test_mse = test_mse
             no_improve_epochs = 0
-            torch.save(model.state_dict(), "best_model.pth")
+            torch.save(model.state_dict(), "models/best_model.pth")
             print(f"Model improved. Saved. "
                   f"Current Train MSE: {train_mse:.4f}. "
                   f"Current Test MSE: {test_mse:.4f}")

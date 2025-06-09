@@ -3,21 +3,20 @@ import torch.nn as nn
 
 
 class FrequencyAttention(nn.Module):
-    def __init__(self, freq_bins, hidden_dim=64):
+    def __init__(self, hidden_dim: int = 32, heads: int = 2):
         super().__init__()
-        self.net = nn.Sequential(
-            nn.Conv1d(in_channels=1, out_channels=hidden_dim, kernel_size=1),  # across freqs
-            nn.ReLU(),
-            nn.Conv1d(hidden_dim, 1, kernel_size=1),  # back to 1 channel
-            nn.Sigmoid()  # soft mask
-        )
+        self.input_proj = nn.Linear(1, hidden_dim)
+        self.attn = nn.MultiheadAttention(embed_dim=hidden_dim, num_heads=heads, batch_first=True)
+        self.output_proj = nn.Linear(hidden_dim, 1)
+        self.sigmoid = nn.Sigmoid()
 
-    def forward(self, x):
-        # x: (batch, frames, 1, freq_bins)
-        b, t, c, f = x.shape
-        x_perm = x.reshape(b * t, c, f)  # (batch*frames, 1, freq)
-        print("Shape input conv1d:", x_perm.shape)
-
-        attn = self.net(x_perm)  # (batch*frames, 1, freq)
-        attn = attn.reshape(b, t, c, f)  # reconstrucție
-        return x * attn  # (batch, frames, 1, freq)
+    def forward(self, x: torch.Tensor):
+        """IN/OUT: (batch_frames, 1, freq_bins)"""
+        x = x.permute(0, 2, 1)
+        x_proj = self.input_proj(x)
+        attn_output, _ = self.attn(x_proj, x_proj, x_proj)
+        out = self.output_proj(attn_output)
+        out = out.permute(0, 2, 1)
+        mask = self.sigmoid(out)
+        out = x.permute(0, 2, 1) * mask
+        return out
