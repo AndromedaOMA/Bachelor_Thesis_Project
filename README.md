@@ -42,7 +42,24 @@ The FSPEN architecture is made up of three major components that, combined, brin
   3. *Decoding module*: like the encoding module, it is divided, this time into a sub-band decoder and a full-band decoder, the two decoders obtain the complexity spectrum mask and the magnitude spectrum mask.
      
 <img src="https://github.com/user-attachments/assets/9576cc8c-a42b-4bb6-83b9-f0a18baff4f4" alt="Model Diagram" width="600" align="center">
-
+</br>
+**FullSubPathExtension(FSPEN) profile**</br>
+[INFO] Register count_convNd() for <class 'torch.nn.modules.conv.Conv1d'>.</br>
+[INFO] Register count_normalization() for <class 'torch.nn.modules.batchnorm.BatchNorm1d'>.</br>
+[INFO] Register zero_ops() for <class 'torch.nn.modules.activation.ReLU'>.</br>
+[INFO] Register count_linear() for <class 'torch.nn.modules.linear.Linear'>.</br>
+[INFO] Register zero_ops() for <class 'torch.nn.modules.container.Sequential'>.</br>
+[INFO] Register count_gru() for <class 'torch.nn.modules.rnn.GRU'>.</br>
+[INFO] Register count_normalization() for <class 'torch.nn.modules.normalization.LayerNorm'>.</br>
+[INFO] Register count_convNd() for <class 'torch.nn.modules.conv.ConvTranspose1d'>.</br>
+</br>
+**Original FSPEN Model**</br>
+FLOPs: 152.7967M</br>
+Params: 34.7960K</br>
+</br>
+**Modiffied FSPEN Model [FrequencyAttention that includes a MultiheadAttention]**</br>
+FLOPs: 154.8691M</br>
+Params: 34.8930K</br>
 
 ---
 
