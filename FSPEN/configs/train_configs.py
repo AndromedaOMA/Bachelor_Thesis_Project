@@ -21,8 +21,8 @@ class TrainConfig(BaseModel):
     n_fft: int = 512
     hop_length: int = 256
     # sample_length: int = 16000  # 1 sec
-    # sample_length: int = 32000  # 2 sec
-    sample_length: int = 48000  # 3 sec
+    sample_length: int = 32000  # 2 sec
+    # sample_length: int = 48000  # 3 sec
     # sample_length: int = 64000  # 4 sec
     train_frames: int = 62
     train_points: int = (train_frames - 1) * hop_length

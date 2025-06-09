@@ -106,7 +106,7 @@ class FullSubPathExtension(nn.Module):
         self.full_band_encoder = FullBandEncoder(configs)
         self.sub_band_encoder = SubBandEncoder(configs)
 
-        self.freq_attention = FrequencyAttention(freq_bins=configs.input_freq_bins)
+        self.freq_attention = FrequencyAttention()
 
         merge_split = configs.merge_split
         merge_channels = merge_split["channels"]
