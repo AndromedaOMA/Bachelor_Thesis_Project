@@ -1,9 +1,35 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" version="27.1.4">
   <diagram name="Page-1" id="6zO39Vgpf1TZ9PNvxlgC">
-    <mxGraphModel>
+    <mxGraphModel dx="546" dy="359" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="P3681-FeyPnp6KC4SGFj-1" value="Original FSPEN" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="120" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="P3681-FeyPnp6KC4SGFj-2" value="STFT" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="205" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="P3681-FeyPnp6KC4SGFj-3" value="Modified FSPEN" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="80" width="350" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="P3681-FeyPnp6KC4SGFj-8" value="FrequencyAttention (Module)" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;" vertex="1" parent="P3681-FeyPnp6KC4SGFj-3">
+          <mxGeometry x="20" y="40" width="70" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="P3681-FeyPnp6KC4SGFj-13" value="Same Arhitecture" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="P3681-FeyPnp6KC4SGFj-3">
+          <mxGeometry x="190" y="125" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="P3681-FeyPnp6KC4SGFj-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="P3681-FeyPnp6KC4SGFj-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="380" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P3681-FeyPnp6KC4SGFj-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="P3681-FeyPnp6KC4SGFj-8" target="P3681-FeyPnp6KC4SGFj-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="P3681-FeyPnp6KC4SGFj-12" value="MultiHeadAttention" style="rounded=1;whiteSpace=wrap;html=1;rotation=-90;" vertex="1" parent="1">
+          <mxGeometry x="340" y="210" width="185" height="25" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
