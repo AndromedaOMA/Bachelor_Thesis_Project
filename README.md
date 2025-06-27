@@ -6,6 +6,7 @@
 * [About Project](#project)
 * [Architecture Overview](#architecture)
 * [Dataset](#dataset)
+* [Conclusion](#conclusion)
 * [Getting Started](#getting-started)
 
 --------------------------------------------------------------------------------
@@ -40,26 +41,33 @@ The FSPEN architecture is made up of three major components that, combined, brin
   1. *The encoding module*: this, in turn, is divided into a sub-band encoder and a full-band encoder, which will lead to a capture of global and local features.
   2. *Dual Path Amplifier with Inter-Frame Path Extension (DPE) module*: improves network shaping capability while maintaining/keeping complexity low.
   3. *Decoding module*: like the encoding module, it is divided, this time into a sub-band decoder and a full-band decoder, the two decoders obtain the complexity spectrum mask and the magnitude spectrum mask.
-     
-<img src="https://github.com/user-attachments/assets/9576cc8c-a42b-4bb6-83b9-f0a18baff4f4" alt="Model Diagram" width="600" align="center">
+
+<h3>FullSubPathExtension(FSPEN) profile (what does the model use)</h3>
+[INFO] Register count_convNd() for class 'torch.nn.modules.conv.Conv1d'.</br>
+[INFO] Register count_normalization() for class 'torch.nn.modules.batchnorm.BatchNorm1d'.</br>
+[INFO] Register zero_ops() for class 'torch.nn.modules.activation.ReLU'.</br>
+[INFO] Register count_linear() for class 'torch.nn.modules.linear.Linear'.</br>
+[INFO] Register zero_ops() for class 'torch.nn.modules.container.Sequential'.</br>
+[INFO] Register count_gru() for class 'torch.nn.modules.rnn.GRU'.</br>
+[INFO] Register count_normalization() for class 'torch.nn.modules.normalization.LayerNorm'.</br>
+[INFO] Register count_convNd() for class 'torch.nn.modules.conv.ConvTranspose1d'.</br>
 </br>
-<h3>FullSubPathExtension(FSPEN) profile</h3>
-[INFO] Register count_convNd() for <class 'torch.nn.modules.conv.Conv1d'>.</br>
-[INFO] Register count_normalization() for <class 'torch.nn.modules.batchnorm.BatchNorm1d'>.</br>
-[INFO] Register zero_ops() for <class 'torch.nn.modules.activation.ReLU'>.</br>
-[INFO] Register count_linear() for <class 'torch.nn.modules.linear.Linear'>.</br>
-[INFO] Register zero_ops() for <class 'torch.nn.modules.container.Sequential'>.</br>
-[INFO] Register count_gru() for <class 'torch.nn.modules.rnn.GRU'>.</br>
-[INFO] Register count_normalization() for <class 'torch.nn.modules.normalization.LayerNorm'>.</br>
-[INFO] Register count_convNd() for <class 'torch.nn.modules.conv.ConvTranspose1d'>.</br>
+<h3>Original FullSubPathExtension(FSPEN) architecture</h3>
+<img src="https://github.com/user-attachments/assets/9576cc8c-a42b-4bb6-83b9-f0a18baff4f4" alt="Model Diagram" width="600" align="center">
 </br>
 <h3>Original FSPEN Model</h3>
 FLOPs: 152.7967M</br>
 Params: 34.7960K</br>
 </br>
+<h3>Modified FullSubPathExtension(FSPEN) architecture</h3>
+<img src="https://github.com/user-attachments/assets/5f4b9608-bcb2-4f59-8167-9be3374e2f51" alt="Modified Model Diagram" width="600" align="center">
+</br>
 <h3>Modiffied FSPEN Model [FrequencyAttention that includes a MultiheadAttention]</h3>
 FLOPs: 154.8691M</br>
 Params: 34.8930K</br>
+</br>
+**Result**: The new FSPEN model has very similar dimensions to the original, thus maintaining its flexibility and essential character as an ultra-light model. That said, the original model has 34.7960K parameters, while the modified model has 34.8930K parameters. That is, a difference of only 0.097K parameters.
+
 
 ---
 
@@ -72,6 +80,13 @@ In this case, we will approach the labeled dataset type. More specifically, we w
 The training and testing of the model will be done through two partitions:
   1. The training partition containing a number of 11.6K data.
   2. The testing partition containing a number of 824 data.
+
+---
+
+<h1 id="conclusion" align="left">🔚 Conclusion</h1>
+
+So far, I have managed to add a "MultiHeadAttention" module to the architecture of the original model. I have trained, on several occasions, the original model (without modifications) and the modified one. Thus, after careful analysis of the plots made based on the PESQ and STOI evaluation metrics, I have come to the conclusion that the performance is slightly changed. Therefore, the modified FSPEN model (which contains the attention module) manages to avoid some of the over- or under-amplification/estimation problems observed in the original model. This is highlighted by plots that show a more pronounced clustering of the analyzed audio sequences and classified based on the PESQ/STOI evaluation metrics. We can further improve the performance by adding more performant and efficient concepts to the model.
+
 
 ---
 
