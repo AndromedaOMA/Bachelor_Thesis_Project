@@ -154,6 +154,26 @@ The training and testing of the model will be done through two partitions:
 
 <h1 id="samples" align="left">🔊 Samples</h1>
 
+Dive into the sound quality of our models. We've prepared samples to showcase the difference!
+
+
+| Sample Set | FPEN Noisy (Original)                                                 | FPEN Clean (Ground Truth) | FPEN Enhanced (Output) | FSPEN Noisy (Original)                                                | FSPEN Clean (Ground Truth) | FSPEN Enhanced (Output) |
+| :--------- | :-------------------------------------------------------------------- | :------------------------ | :--------------------- | :-------------------------------------------------------------------- | :------------------------- | :---------------------- |
+| **Set 1** | https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_noisy_0_7 | [Coming Soon!]            | [Coming Soon!]         | https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_noisy_0_7 | [Coming Soon!]             | [Coming Soon!]          |
+| **Set 2** | [Coming Soon!]                                                        | [Coming Soon!]            | [Coming Soon!]         | [Coming Soon!]                                                        | [Coming Soon!]             | [Coming Soon!]          |
+| **Set 3** | [Coming Soon!]                                                        | [Coming Soon!]            | [Coming Soon!]         | [Coming Soon!]                                                        | [Coming Soon!]             | [Coming Soon!]          |
+
+
+Original FPEN model:
+1. [noisy_sample 1](https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_noisy_0_7)
+2. [clean_sample_1]()
+3. [enhanced_samnple_1]()
+
+Modified FSPEN model:
+1. [noisy_sample 1](https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_noisy_0_7)
+2. [clean_sample_1]()
+3. [enhanced_samnple_1]()
+   
 ---
 
 <h1 id="conclusion" align="left">🔚 Conclusion</h1>
