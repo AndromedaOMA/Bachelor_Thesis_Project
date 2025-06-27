@@ -67,6 +67,7 @@ Params: 34.7960K</br>
 FLOPs: 154.8691M</br>
 Params: 34.8930K</br>
 </br>
+
 **Result**: The new FSPEN model has very similar dimensions to the original, thus maintaining its flexibility and essential character as an ultra-light model. That said, the original model has 34.7960K parameters, while the modified model has 34.8930K parameters. That is, a difference of only 0.097K parameters.
 
 | Original FSPEN parameters  | Modified FSPEN parameters |
@@ -78,19 +79,25 @@ Params: 34.8930K</br>
 <h1 id="statistics" align="left">📈 Statistics and Results</h1>
 
 In the histograms in Figure 1, significant differences can be observed between the original and modified models. The maximum frequency limit of audio sequences per evaluation metric increases drastically, but only for a slightly higher score than the original FSPEN model. This indicates the efficiency that the attention module introduced at the FSPEN model brings at the local level.
-
+</br>
 For better highlighting, we can also consult the table below:
 |                 | STOI gain      |             | PESQ gain     |             |
 |-----------------|------------------|-------------|------------------|-------------|
 |                 | Original FSPEN   | Modified FSPEN | Original FSPEN   | Modified FSPEN |
 | Maximum limit index | -0.025           | -0.015      | 0.20-0.25        | 0.25        |
 | Frequency of audio sequences | 108              | 119         | 138              | 145         |
-
-
+</br>
 <img src="https://github.com/user-attachments/assets/8b5ef5c5-213a-4573-adc9-9e9e6f7773b9" alt="histogramă-frecvența_per_câștig_stoi_pesq" width="600" align="center">
 </br>
 Figure 1
+</br>
+</br>
+In Figure 2, we can see how the multitude of sequences, which do not fall within those upper limits, pull down the entire PESQ/STOI gain. The median of each box indicates the middle value of the data distribution. In both plots, we can see how the median of the plots associated with the modified model indicates slightly lower values ​​than those associated with the original model. We can also see the points/sequences outside the quadrants. These represent the extremes that pull down/up. We have a multitude of extremes that are not taken into account by the plots that indicate the increased variety of the samples.
+</br>
+<img src="https://github.com/user-attachments/assets/95fa7c86-14e7-49a0-906e-0f4269d69c6b" alt="distribuțiile_câștigului_pesq_stoi" width="600" align="center">
+Figure 2
 
+</br>
 ---
 
 <h1 id="dataset" align="left">📄 Dataset</h1>
