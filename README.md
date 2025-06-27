@@ -95,7 +95,41 @@ Figure 1
 In Figure 2, we can see how the multitude of sequences, which do not fall within those upper limits, pull down the entire PESQ/STOI gain. The median of each box indicates the middle value of the data distribution. In both plots, we can see how the median of the plots associated with the modified model indicates slightly lower values ​​than those associated with the original model. We can also see the points/sequences outside the quadrants. These represent the extremes that pull down/up. We have a multitude of extremes that are not taken into account by the plots that indicate the increased variety of the samples.
 </br>
 <img src="https://github.com/user-attachments/assets/95fa7c86-14e7-49a0-906e-0f4269d69c6b" alt="distribuțiile_câștigului_pesq_stoi" width="600" align="center">
+</br>
 Figure 2
+</br>
+</br>
+Figure 3 is a representation of where each audio sequence falls on the PESQ/STOI gain distribution. It is clearly seen that the distribution tends to fall in the southeast quadrant, that is, the quadrant with low STOI gain values ​​and high PESQ gain values. The conclusion is that the PESQ gain is the majority.
+</br>
+<img src="https://github.com/user-attachments/assets/73439a3e-ecfc-48f5-9d88-56e5ec5b675d" alt="distribuțiile_câștigului_pesq_și_stoi" width="600" align="center">
+</br>
+Figure 3
+</br>
+</br>
+Figure 4 gives us a much more detailed picture of the advantages and disadvantages of introducing the attention module at the level of comparison between noisy and improved sequences. As will be seen, the median lines of each PESQ/STOI metric within the improved sound samples of the modified model tend to be slightly lower than those of the original model. This clearly indicates that the attention module obtains the desired results only for a narrower range of audio sequences, while for the rest it actually worsens them (more clearly in figure 3.6.2). However, the differences are relatively small, as a result we can also conclude that regardless of which of the models, they improve the performance in terms of speech quality and perception (PESQ), but the results in terms of speech intelligibility assessment (STOI) are somewhat degraded compared to PESQ.
+</br>
+<img src="https://github.com/user-attachments/assets/7a9d3cfb-d32e-41fd-8f0f-17acba58bc5f" alt="comparații_între_metricile_stoi_pesq_a_secvențelor_cu_zgomot_și_îmbunătățite" width="600" align="center">
+</br>
+Figure 4
+</br>
+</br>
+Figure 5 adds value to our conclusions. Below we see the distribution of noisy and enhanced audio samples on the PESQ/STOI metrics.
+</br>
+  a. **PESQ Metric**: The main diagonal of each plot delimits the portion associated with enhanced sequences (PESQ Enhanced) versus that associated with noisy sequences (PESQ Noisy) which targets speech clarity and perception. Both plots indicate similar values, for example both plots have most of the points/samples placed above the main diagonal/axis, towards the PESQ Enhanced portion, thus indicating an increase in speech clarity. The original FSPEN model (left) expands and scatters audio sequences over a larger area. This suggests that the model may be less consistent with higher quality noisy samples, sometimes over-amplifying or under-amplifying them. While the modified FSPEN model (right) concentrates all of the points in a cluster closer to low to medium values ​​of the PESQ metric. The attention module seems to improve the model and make it more consistent, especially for noisy samples with PESQ between 1.0 and 2.5. </br> </br> 
+
+**Conclusions**: The modified model - </br>
+    i. It shows better consistency in improved PESQ scores, especially at medium and low noise PESQ. </br>
+    ii. It can avoid some of the over- or under-amplification issues seen in the original model. </br>
+    iii. It seems to generalize better over a wider range of input PESQ levels. </br>
+</br>
+</br>
+  b. **STOI Metric**: The main diagonal of each plot delimits the portion associated with the enhanced sequences (STOI Enhanced) compared to that associated with the noisy sequences (STOI Noisy) which aims to evaluate the speech intelligibility. Both plots indicate similar values, for example both plots have the majority of points/samples placed on/above the main diagonal/axis, which highlights that both models contribute to speech intelligibility. This time the original model (left) seems to provide more optimal results at the level of the STOI metric, which is observed at the level of the tendency of the audio sequences to be placed above the oblique axis, compared to the modified model. However, the attention module manages to improve the total scores by 10% compared to the initial case. </br> </br>
+
+**Conclusions**: The modified model - </br>
+    i. It seems to stabilize the results this time too by strongly clustering the samples and avoiding over- or under-amplification problems observed in the original model.
+</br>
+</br>
+<img src="https://github.com/user-attachments/assets/dc0bff3b-9f28-47c8-93cb-8ca765f1b641" alt="comparații_între_metricile_pesq_stoi_a_secvențelor_cu_zgomot_și_îmbunătățite" width="600" align="center">
 
 </br>
 ---
