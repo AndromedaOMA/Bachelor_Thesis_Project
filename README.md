@@ -74,6 +74,8 @@ Params: 34.8930K</br>
 |----------------------------|---------------------------|
 | 34.7960K                   | 34.8930K                  |
 
+* [Table Of Content](#table-of-content)
+
 ---
 
 <h1 id="statistics" align="left">📈 Statistics and Results</h1>
@@ -132,6 +134,9 @@ Figure 5 adds value to our conclusions. Below we see the distribution of noisy a
 <img src="https://github.com/user-attachments/assets/dc0bff3b-9f28-47c8-93cb-8ca765f1b641" alt="comparații_între_metricile_pesq_stoi_a_secvențelor_cu_zgomot_și_îmbunătățite" width="600" align="center">
 
 </br>
+
+* [Table Of Content](#table-of-content)
+
 ---
 
 <h1 id="dataset" align="left">📄 Dataset</h1>
