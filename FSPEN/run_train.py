@@ -181,16 +181,16 @@ if __name__ == "__main__":
     # print(f"clean_complex.shape: {sample['clean_complex'].shape}")
     # print("=======" * 10)
 
-    complex_spectrum = sample["noisy_complex"].to(device=device, dtype=torch.float32)       # (B=1, T, 2, F)
-    amplitude_spectrum = sample["noisy_amplitude"].to(device=device, dtype=torch.float32)   # (B=1, T, 1, F)
-    in_hidden_state = prepare_initial_hidden_state(
-        batch=complex_spectrum.shape[0],
-        num_bands=sum(configs.bands_num_in_groups),
-        num_modules=configs.dual_path_extension["num_modules"],
-        groups=configs.dual_path_extension["parameters"]["groups"],
-        inter_hidden_size=configs.dual_path_extension["parameters"]["inter_hidden_size"],
-        device=device
-    )
+    # complex_spectrum = sample["noisy_complex"].to(device=device, dtype=torch.float32)       # (B=1, T, 2, F)
+    # amplitude_spectrum = sample["noisy_amplitude"].to(device=device, dtype=torch.float32)   # (B=1, T, 1, F)
+    # in_hidden_state = prepare_initial_hidden_state(
+    #     batch=complex_spectrum.shape[0],
+    #     num_bands=sum(configs.bands_num_in_groups),
+    #     num_modules=configs.dual_path_extension["num_modules"],
+    #     groups=configs.dual_path_extension["parameters"]["groups"],
+    #     inter_hidden_size=configs.dual_path_extension["parameters"]["inter_hidden_size"],
+    #     device=device
+    # )
 
     # # FullSubPathExtension profile
     # flops, params = profile(model, inputs=(complex_spectrum, amplitude_spectrum, in_hidden_state))

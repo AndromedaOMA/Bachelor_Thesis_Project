@@ -77,6 +77,7 @@ class VoiceBankDEMAND(Dataset):
         return signal
 
     def _prepare_spectrum_inputs(self, waveforms: torch.Tensor):
+        """Complex spectrum: (B, T, 2, F) | Amplitude spectrum: (B, T, 1, F)"""
         B = waveforms.size(0)
 
         complex_spectrum = torch.stft(

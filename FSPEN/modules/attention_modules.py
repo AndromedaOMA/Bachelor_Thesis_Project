@@ -3,7 +3,7 @@ import torch.nn as nn
 
 
 class FrequencyAttention(nn.Module):
-    def __init__(self, hidden_dim: int = 32, heads: int = 2):
+    def __init__(self, hidden_dim: int = 32, heads: int = 3):
         super().__init__()
         self.input_proj = nn.Linear(1, hidden_dim)
         self.attn = nn.MultiheadAttention(embed_dim=hidden_dim, num_heads=heads, batch_first=True)
