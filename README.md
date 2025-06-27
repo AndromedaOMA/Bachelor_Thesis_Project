@@ -77,7 +77,7 @@ Params: 34.8930K</br>
 
 <h1 id="statistics" align="left">📈 Statistics and Results</h1>
 
-1. In the histograms in Figure 1, significant differences can be observed between the original and modified models. The maximum frequency limit of audio sequences per evaluation metric increases drastically, but only for a slightly higher score than the original FSPEN model. This indicates the efficiency that the attention module introduced at the FSPEN model brings at the local level.
+In the histograms in Figure 1, significant differences can be observed between the original and modified models. The maximum frequency limit of audio sequences per evaluation metric increases drastically, but only for a slightly higher score than the original FSPEN model. This indicates the efficiency that the attention module introduced at the FSPEN model brings at the local level.
 
 For better highlighting, we can also consult the table below:
 |                             | STOI gain                       | PESQ gain                       |
@@ -85,6 +85,10 @@ For better highlighting, we can also consult the table below:
 |                             | Original FSPEN | Modified FSPEN | Original FSPEN | Modified FSPEN |
 | Maximum limit index         | -0.025         | -0.015         | 0.20-0.25      | 0.25           |
 | Frequency of audio sequences| 108            | 119            | 138            | 145            |
+
+<img src="https://github.com/user-attachments/assets/8b5ef5c5-213a-4573-adc9-9e9e6f7773b9" alt="histogramă-frecvența_per_câștig_stoi_pesq" width="600" align="center">
+</br>
+Figure 1
 
 ---
 
