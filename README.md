@@ -5,6 +5,7 @@
 ## Table Of Content
 * [About Project](#project)
 * [Architecture Overview](#architecture)
+* [Statistics and Results](#statistics)
 * [Dataset](#dataset)
 * [Conclusion](#conclusion)
 * [Getting Started](#getting-started)
@@ -68,6 +69,22 @@ Params: 34.8930K</br>
 </br>
 **Result**: The new FSPEN model has very similar dimensions to the original, thus maintaining its flexibility and essential character as an ultra-light model. That said, the original model has 34.7960K parameters, while the modified model has 34.8930K parameters. That is, a difference of only 0.097K parameters.
 
+| Original FSPEN parameters  | Modified FSPEN parameters |
+|----------------------------|---------------------------|
+| 34.7960K                   | 34.8930K                  |
+
+---
+
+<h1 id="statistics" align="left">📈 Statistics and Results</h1>
+
+1. In the histograms in Figure 1, significant differences can be observed between the original and modified models. The maximum frequency limit of audio sequences per evaluation metric increases drastically, but only for a slightly higher score than the original FSPEN model. This indicates the efficiency that the attention module introduced at the FSPEN model brings at the local level.
+
+For better highlighting, we can also consult the table below:
+|                             | STOI gain                       | PESQ gain                       |
+|-----------------------------|---------------------------------|---------------------------------|
+|                             | Original FSPEN | Modified FSPEN | Original FSPEN | Modified FSPEN |
+| Maximum limit index         | -0.025         | -0.015         | 0.20-0.25      | 0.25           |
+| Frequency of audio sequences| 108            | 119            | 138            | 145            |
 
 ---
 
