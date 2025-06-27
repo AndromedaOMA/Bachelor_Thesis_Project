@@ -7,6 +7,7 @@
 * [Architecture Overview](#architecture)
 * [Statistics and Results](#statistics)
 * [Dataset](#dataset)
+* [Samples](#samples)
 * [Conclusion](#conclusion)
 * [Getting Started](#getting-started)
 
@@ -148,6 +149,10 @@ In this case, we will approach the labeled dataset type. More specifically, we w
 The training and testing of the model will be done through two partitions:
   1. The training partition containing a number of 11.6K data.
   2. The testing partition containing a number of 824 data.
+
+---
+
+<h1 id="samples" align="left">🔊 Samples</h1>
 
 ---
 
