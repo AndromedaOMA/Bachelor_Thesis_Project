@@ -157,11 +157,11 @@ The training and testing of the model will be done through two partitions:
 Dive into the sound quality of our models. We've prepared samples to showcase the difference!
 
 
-| Sample Set | FPEN Noisy (Original)                                                 | FPEN Clean (Ground Truth) | FPEN Enhanced (Output) | FSPEN Noisy (Original)                                                | FSPEN Clean (Ground Truth) | FSPEN Enhanced (Output) |
+| Sample Set | Original FPEN </br> Noisy (Original)  |  Original FSPEN <br/> Clean (Ground Truth) | Original </br> FPEN Enhanced (Output) | Modified FPEN </br> Noisy (Original)   | Modified FSPEN <br/> Clean (Ground Truth) | Modified </br> FPEN Enhanced (Output) |
 | :--------- | :-------------------------------------------------------------------- | :------------------------ | :--------------------- | :-------------------------------------------------------------------- | :------------------------- | :---------------------- |
-| **Set 1** | https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_noisy_0_7 | [Coming Soon!]            | [Coming Soon!]         | https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_noisy_0_7 | [Coming Soon!]             | [Coming Soon!]          |
-| **Set 2** | [Coming Soon!]                                                        | [Coming Soon!]            | [Coming Soon!]         | [Coming Soon!]                                                        | [Coming Soon!]             | [Coming Soon!]          |
-| **Set 3** | [Coming Soon!]                                                        | [Coming Soon!]            | [Coming Soon!]         | [Coming Soon!]                                                        | [Coming Soon!]             | [Coming Soon!]          |
+| **Set 1** | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_noisy_0_7) | [Click here!]()            | [Click here!]()         | [Click here!]() | [Click here!]()             | [Click here!]()          |
+| **Set 2** | [Click here!]()                                                        | [Click here!]()            | [Click here!]()         | [Click here!]()                                                        | [Click here!]()             | [Click here!]()          |
+| **Set 3** | [Click here!]()                                                        | [Click here!]()            | [Click here!]()         | [Click here!]()                                                        | [Click here!]()             | [Click here!]()          |
 
 
 Original FPEN model:
