@@ -160,19 +160,8 @@ Dive into the sound quality of our models. We've prepared samples to showcase th
 | Sample Set | Original FPEN </br> Noisy (Original)  |  Original FSPEN <br/> Clean (Ground Truth) | Original </br> FPEN Enhanced (Output) | Modified FPEN </br> Noisy (Original)   | Modified FSPEN <br/> Clean (Ground Truth) | Modified </br> FPEN Enhanced (Output) |
 | :--------- | :-------------------------------------------------------------------- | :------------------------ | :--------------------- | :-------------------------------------------------------------------- | :------------------------- | :---------------------- |
 | **Set 1** | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_noisy_0_7) | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_clean_0_7)            | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_enhanced_0_7)         | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_w_mha_noisy_0_7) | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_w_mha_clean_0_7)         | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_w_mha_enhanced_0_7)          |
-| **Set 2** | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_noisy_2_22)     | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_clean_2_22)            | [Click here!]()         | [Click here!]()      | [Click here!]()             | [Click here!]()          |
+| **Set 2** | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_noisy_2_22)     | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_clean_2_22)            | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_enhanced_2_22)         | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_w_mha_noisy_2_22)      | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_w_mha_clean_0_7)             | [Click here!](https://soundcloud.com/marius-alexandru-olaru/4sec_w_mha_enhanced_2_22)          |
 | **Set 3** | [Click here!]()                                                        | [Click here!]()            | [Click here!]()         | [Click here!]()                                                        | [Click here!]()             | [Click here!]()          |
-
-
-Original FPEN model:
-1. [noisy_sample 1](https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_noisy_0_7)
-2. [clean_sample_1]()
-3. [enhanced_samnple_1]()
-
-Modified FSPEN model:
-1. [noisy_sample 1](https://soundcloud.com/marius-alexandru-olaru/4sec_no_mha_noisy_0_7)
-2. [clean_sample_1]()
-3. [enhanced_samnple_1]()
    
 ---
 
