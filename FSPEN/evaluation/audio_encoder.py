@@ -1,10 +1,12 @@
+import os
+
 import torch
 from torch.utils.data import DataLoader
 import soundfile as sf
 
 from FSPEN.configs.train_configs import TrainConfig
 from FSPEN.data.voicebank_demand_16K import VoiceBankDEMAND
-from FSPEN.models.fspen import FullSubPathExtension
+from FSPEN.models.efspen import FullSubPathExtension
 
 
 def prepare_initial_hidden_state(
@@ -27,10 +29,15 @@ if __name__ == "__main__":
     configs = TrainConfig()
     model = FullSubPathExtension(configs).to(device)
     model.eval()
-    # state_dict = torch.load("../models/best_model_0.0613.pth") # +mha
-    # out_dir = 'outputs/4sec_samples_mha'
-    state_dict = torch.load("../models/best_model_0.0676.pth")
-    out_dir = 'outputs/4sec_samples'
+    state_dict = torch.load("../models/best_model_0.0613.pth")  # +mha
+    out_dir = 'outputs/4sec_samples_mha'
+    # state_dict = torch.load("../models/best_model_0.0676.pth")
+    # out_dir = './outputs/4sec_samples'
+
+    os.makedirs(f'{out_dir}/enhanced', exist_ok=True)
+    os.makedirs(f'{out_dir}/clean', exist_ok=True)
+    os.makedirs(f'{out_dir}/noisy', exist_ok=True)
+
     filtered_state_dict = {k: v for k, v in state_dict.items() if
                            k in model.state_dict() and model.state_dict()[k].shape == v.shape}
     model.load_state_dict(state_dict)
@@ -41,6 +48,7 @@ if __name__ == "__main__":
     for i, batch in enumerate(test_loader):
         # if i <= 4:
         with torch.no_grad():
+            ids = batch["id"]
             clean = batch["clean_waveform"]
             noisy = batch["noisy_waveform"]
             complex_input = batch["noisy_complex"].to(device).float().squeeze(1)
@@ -74,7 +82,7 @@ if __name__ == "__main__":
             print(f"noisy shape: {noisy.shape}")
             print(f"audio_recon shape: {audio_recon.shape}")
 
-        for b in range(batch_size):
-            sf.write(f'{out_dir}/enhanced/enhanced_{i}_{b}.wav', audio_recon_np[b], 16000)
-            sf.write(f'{out_dir}/clean/clean_{i}_{b}.wav', clean_np[b], 16000)
-            sf.write(f'{out_dir}/noisy/noisy_{i}_{b}.wav', noisy_np[b], 16000)
+        for b, id in enumerate(ids):
+            sf.write(f'{out_dir}/enhanced/enhanced_{id}_{i}.wav', audio_recon_np[b], 16000)
+            sf.write(f'{out_dir}/clean/clean_{id}_{i}.wav', clean_np[b], 16000)
+            sf.write(f'{out_dir}/noisy/noisy_{id}_{i}.wav', noisy_np[b], 16000)

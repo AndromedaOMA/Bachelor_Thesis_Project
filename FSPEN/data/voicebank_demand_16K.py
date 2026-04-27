@@ -1,6 +1,7 @@
 import torch
+import io
 import torchaudio
-from datasets import load_dataset
+from datasets import load_dataset, Audio
 from torch.utils.data import Dataset
 
 from FSPEN.configs.train_configs import TrainConfig
@@ -11,6 +12,8 @@ class VoiceBankDEMAND(Dataset):
         self.device = device
         self.configs = configs
         self.ds = load_dataset("JacobLinCool/VoiceBank-DEMAND-16k")
+        self.ds = self.ds.cast_column("noisy", Audio(decode=False))
+        self.ds = self.ds.cast_column("clean", Audio(decode=False))
         self.sample_rate = 16000
         self.num_samples = configs.sample_length
         self.train_data = self.ds["train"]
@@ -18,40 +21,48 @@ class VoiceBankDEMAND(Dataset):
         self.mode = mode
 
     def __len__(self):
-        if self.mode == 'train':
-            return len(self.train_data)
-        else:
-            return len(self.test_data)
+        return len(self.train_data) if self.mode == 'train' else len(self.test_data)
 
     def __getitem__(self, index):
-        if self.mode == 'train':
-            data = self.train_data
-        else:
-            data = self.test_data
-        noisy = data[index]['noisy']
-        clean = data[index]['clean']
+        data = self.train_data if self.mode == 'train' else self.test_data
 
-        noisy_waveform = torch.tensor(noisy['array']).unsqueeze(0)
-        clean_waveform = torch.tensor(clean['array']).unsqueeze(0)
+        # 2. Extract raw bytes from the dictionary
+        id_dict = data[index]['id']
+        noisy_dict = data[index]['noisy']
+        clean_dict = data[index]['clean']
 
+        # 3. Use torchaudio to load from raw bytes (bypasses torchcodec)
+        # noisy_dict['bytes'] contains the raw WAV file data
+        noisy_waveform, sr_n = torchaudio.load(io.BytesIO(noisy_dict['bytes']))
+        clean_waveform, sr_c = torchaudio.load(io.BytesIO(clean_dict['bytes']))
+
+        # 4. Resample if Hugging Face version differs (though this dataset is 16k)
+        if sr_n != self.sample_rate:
+            resampler = torchaudio.transforms.Resample(sr_n, self.sample_rate).to(noisy_waveform.device)
+            noisy_waveform = resampler(noisy_waveform)
+        if sr_c != self.sample_rate:
+            resampler = torchaudio.transforms.Resample(sr_c, self.sample_rate).to(clean_waveform.device)
+            clean_waveform = resampler(clean_waveform)
+
+        # 5. Rest of your processing logic
         noisy_waveform = self._process_waveform(noisy_waveform)
         clean_waveform = self._process_waveform(clean_waveform)
 
-        noisy_waveform = noisy_waveform.to(self.device).squeeze(0).unsqueeze(0)
-        clean_waveform = clean_waveform.to(self.device).squeeze(0).unsqueeze(0)
+        # Move to GPU
+        noisy_waveform = noisy_waveform.to(self.device)
+        clean_waveform = clean_waveform.to(self.device)
 
         noisy_complex, noisy_amplitude = self._prepare_spectrum_inputs(noisy_waveform)
         clean_complex, clean_amplitude = self._prepare_spectrum_inputs(clean_waveform)
-        # print(f"noisy_amplitude: mean={noisy_amplitude.mean().item()}, std={noisy_amplitude.std().item()}")
-        # print(f"noisy_complex: mean={noisy_complex.mean().item()}, std={noisy_complex.std().item()}")
 
         return {
-            "noisy_waveform": noisy_waveform,
-            "clean_waveform": clean_waveform,
-            "noisy_amplitude": noisy_amplitude.clone().detach().float(),
-            "noisy_complex": noisy_complex.clone().detach().float(),
-            "clean_amplitude": clean_amplitude.clone().detach().float(),
-            "clean_complex": clean_complex.clone().detach().float(),
+            'id': id_dict,
+            'noisy_waveform': noisy_waveform,
+            'clean_waveform': clean_waveform,
+            'noisy_complex': noisy_complex,
+            'noisy_amplitude': noisy_amplitude,
+            'clean_complex': clean_complex,
+            'clean_amplitude': clean_amplitude
         }
 
     def _process_waveform(self, signal):
