@@ -1,0 +1,33 @@
+Loading Teacher model (Frozen)...
+Loading Student model (Trainable)...
+Starting Training: 10 Epochs, 2000 Steps/Epoch...
+
+========== EPOCH 1/10 ==========
+Epoch 1:  20%|██        | 400/2000 [09:38<28:38,  1.07s/it, Loss=0.5113]--> Step 400: New best model! Val Loss: 0.2954
+Epoch 1:  40%|████      | 800/2000 [19:30<18:50,  1.06it/s, Loss=0.6840]--> Step 800: No improvement. Val Loss: 0.3156 (Patience: 1/5)
+Epoch 1:  60%|██████    | 1200/2000 [28:35<15:30,  1.16s/it, Loss=0.7635]--> Step 1200: No improvement. Val Loss: 0.3905 (Patience: 2/5)
+Epoch 1:  80%|████████  | 1600/2000 [36:39<06:37,  1.01it/s, Loss=0.7002]--> Step 1600: New best model! Val Loss: 0.2389
+Epoch 1: 100%|██████████| 2000/2000 [44:21<00:00,  1.33s/it, Loss=0.7157]
+--> Step 2000: No improvement. Val Loss: 0.2764 (Patience: 1/5)
+
+========== EPOCH 2/10 ==========
+Epoch 2:  20%|██        | 400/2000 [08:58<30:30,  1.14s/it, Loss=0.4594]--> Step 400: New best model! Val Loss: 0.2207
+Epoch 2:  40%|████      | 800/2000 [18:21<18:51,  1.06it/s, Loss=0.6608]--> Step 800: No improvement. Val Loss: 0.2752 (Patience: 1/5)
+Epoch 2:  60%|██████    | 1200/2000 [26:06<14:20,  1.08s/it, Loss=0.7175]--> Step 1200: No improvement. Val Loss: 0.3867 (Patience: 2/5)
+Epoch 2:  80%|████████  | 1600/2000 [33:03<05:39,  1.18it/s, Loss=0.6913]--> Step 1600: No improvement. Val Loss: 0.3001 (Patience: 3/5)
+Epoch 2: 100%|██████████| 2000/2000 [40:28<00:00,  1.21s/it, Loss=0.6748]
+--> Step 2000: No improvement. Val Loss: 0.2675 (Patience: 4/5)
+
+========== EPOCH 3/10 ==========
+Epoch 3:  20%|██        | 400/2000 [08:29<33:58,  1.27s/it, Loss=0.4380]
+--> Step 400: No improvement. Val Loss: 0.2290 (Patience: 5/5)
+
+Early stopping triggered! Training halted at Epoch 3.
+
+Training complete. Best Validation Loss: 0.2207
+Exception ignored in: <generator object Parquet._generate_tables at 0x000002592321D2F0>
+Traceback (most recent call last):
+  File "D:\Windows_Folders\FACULTATE\Anaconda\envs\ACNN2\Lib\site-packages\datasets\packaged_modules\parquet\parquet.py", line 183, in _generate_tables
+AttributeError: 'NoneType' object has no attribute 'ArrowInvalid'
+
+Process finished with exit code 0
