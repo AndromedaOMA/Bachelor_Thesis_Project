@@ -35,7 +35,7 @@
         <mxCell id="SC53yJuGC-imMWoEbPdZ-15" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="SC53yJuGC-imMWoEbPdZ-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="SC53yJuGC-imMWoEbPdZ-9">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SC53yJuGC-imMWoEbPdZ-13" parent="WIyWlLk6GJQsqaUBKTNV-1" style="rhombus;whiteSpace=wrap;html=1;" value="EFSPEN&lt;div&gt;model&lt;/div&gt;" vertex="1">
+        <mxCell id="SC53yJuGC-imMWoEbPdZ-13" parent="WIyWlLk6GJQsqaUBKTNV-1" style="rhombus;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#e1d5e7;strokeColor=#9673a6;" value="EFSPEN&lt;div&gt;model&lt;/div&gt;" vertex="1">
           <mxGeometry height="60" width="80" x="20" y="470" as="geometry" />
         </mxCell>
         <mxCell id="SC53yJuGC-imMWoEbPdZ-21" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="SC53yJuGC-imMWoEbPdZ-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="SC53yJuGC-imMWoEbPdZ-20">
@@ -54,7 +54,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="SC53yJuGC-imMWoEbPdZ-17" parent="WIyWlLk6GJQsqaUBKTNV-1" style="rhombus;whiteSpace=wrap;html=1;" value="pre-trained ECAPA-TDNN model" vertex="1">
+        <mxCell id="SC53yJuGC-imMWoEbPdZ-17" parent="WIyWlLk6GJQsqaUBKTNV-1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="pre-trained ECAPA-TDNN model" vertex="1">
           <mxGeometry height="120" width="90" x="460" y="450" as="geometry" />
         </mxCell>
         <mxCell id="SC53yJuGC-imMWoEbPdZ-26" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="SC53yJuGC-imMWoEbPdZ-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
@@ -62,7 +62,7 @@
             <mxPoint x="780" y="460" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="SC53yJuGC-imMWoEbPdZ-19" parent="WIyWlLk6GJQsqaUBKTNV-1" style="rounded=0;whiteSpace=wrap;html=1;" value="Targets&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;(Positive Pairs&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;)&lt;/span&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="SC53yJuGC-imMWoEbPdZ-19" parent="WIyWlLk6GJQsqaUBKTNV-1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Targets&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;(Positive Pairs&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;)&lt;/span&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="60" width="120" x="580" y="430" as="geometry" />
         </mxCell>
         <mxCell id="SC53yJuGC-imMWoEbPdZ-23" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="SC53yJuGC-imMWoEbPdZ-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
@@ -70,7 +70,7 @@
             <mxPoint x="780" y="560" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="SC53yJuGC-imMWoEbPdZ-20" parent="WIyWlLk6GJQsqaUBKTNV-1" style="rounded=0;whiteSpace=wrap;html=1;" value="Impostors&lt;div&gt;(Negative Pairs)&lt;/div&gt;" vertex="1">
+        <mxCell id="SC53yJuGC-imMWoEbPdZ-20" parent="WIyWlLk6GJQsqaUBKTNV-1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Impostors&lt;div&gt;(Negative Pairs)&lt;/div&gt;" vertex="1">
           <mxGeometry height="60" width="120" x="580" y="530" as="geometry" />
         </mxCell>
         <mxCell id="SC53yJuGC-imMWoEbPdZ-24" parent="WIyWlLk6GJQsqaUBKTNV-1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Cosine Similarity" vertex="1">
