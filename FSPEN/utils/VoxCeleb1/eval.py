@@ -21,7 +21,7 @@ device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 # Load Enhancer Predictor
 predictor = EFSPENEnhancer("../../models/best_model_0.0613.pth", device=device)
 
-# Load Baseline Verification Model (for original noisy audio)
+# Load Baseline Verification Model (for unadapted enhanced audio)
 baseline_verification = SpeakerRecognition.from_hparams(
     source="speechbrain/spkrec-ecapa-voxceleb",
     run_opts={"device": device}
@@ -58,14 +58,13 @@ ds = load_dataset(
     features=custom_features
 )
 
-NUM_SPEAKERS = 20
-SAMPLES_PER_SPK = 45
+NUM_SPEAKERS = 25
+SAMPLES_PER_SPK = 35
 speaker_data = defaultdict(list)
-found_speakers = []
 found_speakers = []
 resampler = None
 
-print(f"Processing {NUM_SPEAKERS} speakers for Evaluation...")
+print(f"Processing {NUM_SPEAKERS} speakers for 2-Way Evaluation...")
 
 # --- 3. Processing Loop ---
 try:
@@ -103,16 +102,18 @@ try:
                 elif wav.shape[1] < target_len:
                     wav = torch.nn.functional.pad(wav, (0, target_len - wav.shape[1]))
 
-                # --- 1. Baseline Pathway ---
-                emb_noisy = baseline_verification.encode_batch(wav).squeeze().cpu()
-
-                # --- 2. Adapted Pathway ---
+                # EFSPEN Enhancement
                 enhanced_wav = predictor.enhance_audio(wav)
+
+                # --- 1. Unadapted Enhanced Pathway ---
+                emb_enh_baseline = baseline_verification.encode_batch(enhanced_wav.to(device)).squeeze().cpu()
+
+                # --- 2. Adapted Enhanced Pathway ---
                 emb_enh_adapted = adapted_verification.encode_batch(enhanced_wav.to(device)).squeeze().cpu()
 
                 # Store Normalized Embeddings
                 speaker_data[spk_id].append({
-                    "Baseline Noisy": torch.nn.functional.normalize(emb_noisy, dim=-1),
+                    "Unadapted Enhanced": torch.nn.functional.normalize(emb_enh_baseline, dim=-1),
                     "Adapted Enhanced": torch.nn.functional.normalize(emb_enh_adapted, dim=-1)
                 })
                 print(f"Captured: Spk {spk_id} | Sample {len(speaker_data[spk_id])}/{SAMPLES_PER_SPK}")
@@ -124,12 +125,13 @@ except Exception as e:
 if len(speaker_data) < 2:
     print(f"Insufficient data. Collected {len(speaker_data)} speakers.")
 else:
-    print("\nCalculating EER Results...")
-    fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+    print("\nCalculating 2-Way EER Results...")
+    # Adjusted figsize to 14x6 for a clean 2-chart layout
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
     plt.suptitle('VoxCeleb1 Performance Comparison', fontsize=16, fontweight='bold')
 
     results_summary = {}
-    modes = ["Baseline Noisy", "Adapted Enhanced"]
+    modes = ["Unadapted Enhanced", "Adapted Enhanced"]
 
     for idx, mode in enumerate(modes):
         pos_scores, neg_scores = [], []
@@ -160,10 +162,10 @@ else:
             ax.set_xlabel("Cosine Similarity Score")
             ax.legend()
 
-    print("\n" + "=" * 35)
+    print("\n" + "=" * 40)
     for k, v in results_summary.items():
         print(f"{k} EER: {v:.2f}%")
-    print("=" * 35)
+    print("=" * 40)
 
     plt.tight_layout()
     plt.show()
